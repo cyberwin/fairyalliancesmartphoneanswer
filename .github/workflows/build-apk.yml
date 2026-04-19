@@ -1,4 +1,4 @@
-name: 构建APK
+name: 构建0419-19 APK
 
 on:
   push:
@@ -10,24 +10,29 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: fairyalliancesmartphoneanswer  # 关键修复
+        working-directory: fairyalliancesmartphoneanswer  # 必须！你项目套了两层
 
     steps:
-      - uses: actions/checkout@v4
+      - name: 检出代码
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: 设置 JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build APK
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: assembleDebug
+      # 重点：直接系统安装 gradle，完全不用 gradlew
+      - name: 安装 Gradle
+        run: sudo apt update && sudo apt install gradle -y
 
-      - name: Upload APK
+      # 直接编译！不依赖任何项目内工具
+      - name: 编译 APK
+        run: gradle assembleDebug
+
+      # 上传 APK
+      - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
-          name: apk
-          path: "fairyalliancesmartphoneanswer/app/build/outputs/apk/debug/*.apk"
+          name: my-apk
+          path: fairyalliancesmartphoneanswer/app/build/outputs/apk/debug/*.apk
