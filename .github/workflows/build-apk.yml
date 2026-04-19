@@ -1,4 +1,5 @@
-name: 构建APK
+name: 构建APK145
+
 on:
   push:
     branches: [ main ]
@@ -7,18 +8,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - uses: actions/checkout@v4
+      - name: 下载代码
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: 设置JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Run Android Build
-        uses: appledeluxe/android-github-actions-build@v1.0.0
+      # 👇 这一句自动处理所有 Gradle 环境，不需要你有 gradlew
+      - name: 执行构建
+        run: |
+          cd fairyalliancesmartphoneanswer
+          gradle assembleDebug
+
+      - name: 上传APK
+        uses: actions/upload-artifact@v4
         with:
-          project-path: './fairyalliancesmartphoneanswer'
-          commands: 'assembleDebug'
+          name: my-apk
+          path: "**/*.apk"
