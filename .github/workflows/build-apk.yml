@@ -1,4 +1,4 @@
-name: 构建APK177
+name: 构建APK188
 
 on:
   push:
@@ -18,16 +18,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: 安装 Gradle 8.5
-        run: |
-          sudo apt remove -y gradle
-          sudo apt update
-          sudo apt install -y wget unzip
-          wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip
-          unzip -q gradle-8.5-bin.zip
-          sudo mv gradle-8.5 /opt/gradle
-          sudo ln -s /opt/gradle/bin/gradle /usr/bin/gradle
-
+      # 🔥 核心：直接用系统 gradle，不装、不删、不创建链接！
       - name: 编译 APK
         run: |
           cd fairyalliancesmartphoneanswer
