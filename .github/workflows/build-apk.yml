@@ -1,4 +1,4 @@
-name: 构建2026-04-19-129APK
+name: 构建APK
 on:
   push:
     branches: [ main ]
@@ -10,33 +10,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1. 先删除旧版 Gradle（避免冲突）
-      - name: 清理旧版Gradle
-        run: |
-          sudo rm -f /usr/bin/gradle
-          sudo rm -rf /opt/gradle
+      # 1. 安装正确版本 Gradle
+      - name: Install Gradle 8.4
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.4
 
-      # 2. 安装 Gradle 8.2（稳定版）
-      - name: 安装 Gradle 8.2
-        run: |
-          wget https://services.gradle.org/distributions/gradle-8.2-bin.zip
-          unzip -q gradle-8.2-bin.zip
-          sudo mv gradle-8.2 /opt/gradle
-          sudo ln -s /opt/gradle/bin/gradle /usr/bin/gradle
+      # 2. 直接编译（不用cd多层！）
+      - name: 编译 APK
+        run: gradle assembleDebug
 
-      # 3. 验证安装
-      - name: 验证Gradle版本
-        run: gradle -v
-
-      # 4. 进入项目目录（自动处理双层目录）
-      - name: 编译APK
-        run: |
-          cd fairyalliancesmartphoneanswer/fairyalliancesmartphoneanswer
-          gradle assembleDebug
-
-      # 5. 上传APK
+      # 3. 上传APK
       - name: 上传APK
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: "fairyalliancesmartphoneanswer/fairyalliancesmartphoneanswer/app/build/outputs/apk/debug/*.apk"
+          path: "**/build/outputs/apk/debug/*.apk"
