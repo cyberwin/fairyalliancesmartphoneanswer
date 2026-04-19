@@ -1,12 +1,16 @@
 name: Build APK
+
 on:
   push:
-    branches: [ main ]  # 你推送到main就自动编译
-  workflow_dispatch:    # 也可以手动点按钮编译
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fairyalliancesmartphoneanswer  # 关键：进入子目录
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -16,15 +20,17 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: gradle
+          cache-dependency-path: 'fairyalliancesmartphoneanswer/**/*.gradle*'
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-      - name: Build Debug APK
+      - name: Build debug APK
         run: ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: app-debug
+          path: fairyalliancesmartphoneanswer/app/build/outputs/apk/debug/app-debug.apk
