@@ -1,0 +1,2 @@
+# fairyalliancesmartphoneanswer
+phone auto answer
