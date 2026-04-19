@@ -1,4 +1,4 @@
-name: Build APK166
+name: 构建APK177
 
 on:
   push:
@@ -12,23 +12,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: 设置 JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Grant execute permission
-        run: chmod +x gradlew
+      - name: 安装 Gradle 8.5
+        run: |
+          sudo apt remove -y gradle
+          sudo apt update
+          sudo apt install -y wget unzip
+          wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip
+          unzip -q gradle-8.5-bin.zip
+          sudo mv gradle-8.5 /opt/gradle
+          sudo ln -s /opt/gradle/bin/gradle /usr/bin/gradle
 
-      - name: Build with Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: assembleDebug
-          build-root-directory: fairyalliancesmartphoneanswer
+      - name: 编译 APK
+        run: |
+          cd fairyalliancesmartphoneanswer
+          gradle assembleDebug
 
-      - name: Upload APK
+      - name: 上传APK
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: fairyalliancesmartphoneanswer/app/build/outputs/apk/debug/*.apk
+          path: "fairyalliancesmartphoneanswer/app/build/outputs/apk/debug/*.apk"
