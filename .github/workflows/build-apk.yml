@@ -1,4 +1,4 @@
-name: 构建APK
+name: 构建2026-04-19-132APK
 on:
   push:
     branches: [ main ]
@@ -7,21 +7,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fairyalliancesmartphoneanswer  # 进入正确的项目层
+
     steps:
       - uses: actions/checkout@v4
 
-      # 1. 安装正确版本 Gradle
-      - name: Install Gradle 8.4
+      - name: 设置 Gradle 8.4
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.4
 
-      # 2. 直接编译（不用cd多层！）
       - name: 编译 APK
         run: gradle assembleDebug
 
-      # 3. 上传APK
-      - name: 上传APK
+      - name: 上传 APK
         uses: actions/upload-artifact@v4
         with:
           name: apk
