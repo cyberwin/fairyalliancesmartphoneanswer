@@ -1,4 +1,4 @@
-name: 构建APK188
+name: Build APK199
 
 on:
   push:
@@ -12,20 +12,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 设置 JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 🔥 核心：直接用系统 gradle，不装、不删、不创建链接！
-      - name: 编译 APK
+      - name: Build APK
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.5
+
+      - name: Build
         run: |
           cd fairyalliancesmartphoneanswer
           gradle assembleDebug
 
-      - name: 上传APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: "fairyalliancesmartphoneanswer/app/build/outputs/apk/debug/*.apk"
+          path: fairyalliancesmartphoneanswer/app/build/outputs/apk/debug/*.apk
