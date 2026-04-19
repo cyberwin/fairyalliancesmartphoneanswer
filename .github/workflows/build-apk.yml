@@ -1,4 +1,4 @@
-name: 构建2026-04-19-132APK
+name: 构建APK
 on:
   push:
     branches: [ main ]
@@ -7,23 +7,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: fairyalliancesmartphoneanswer  # 进入正确的项目层
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: 设置 Gradle 8.4
-        uses: gradle/actions/setup-gradle@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          gradle-version: 8.4
+          java-version: '17'
+          distribution: 'temurin'
 
-      - name: 编译 APK
-        run: gradle assembleDebug
-
-      - name: 上传 APK
-        uses: actions/upload-artifact@v4
+      - name: Run Android Build
+        uses: appledeluxe/android-github-actions-build@v1.0.0
         with:
-          name: apk
-          path: "**/build/outputs/apk/debug/*.apk"
+          project-path: './fairyalliancesmartphoneanswer'
+          commands: 'assembleDebug'
