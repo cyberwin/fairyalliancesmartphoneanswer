@@ -1,5 +1,4 @@
-name: 构建2026-04-19099APK
-
+name: 构建2026-04-19-109APK
 on:
   push:
     branches: [ main ]
@@ -8,27 +7,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: fairyalliancesmartphoneanswer
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+      # 1. 安装正确版本的 Gradle（手动安装，不依赖系统）
+      - name: 安装 Gradle 8.2
+        run: |
+          wget https://services.gradle.org/distributions/gradle-8.2-bin.zip
+          unzip -q gradle-8.2-bin.zip
+          sudo mv gradle-8.2 /opt/gradle
+          sudo ln -s /opt/gradle/bin/gradle /usr/bin/gradle
 
-      - name: Install Gradle
-        run: sudo apt update && sudo apt install gradle -y
+      # 2. 进入你的项目目录（双层目录）
+      - name: 进入项目目录
+        run: cd fairyalliancesmartphoneanswer
 
+      # 3. 编译
       - name: 编译APK
-        run: gradle assembleDebug
+        run: |
+          cd fairyalliancesmartphoneanswer
+          gradle assembleDebug
 
+      # 4. 上传APK
       - name: 上传APK
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: "**/build/outputs/apk/debug/*.apk"
+          path: "fairyalliancesmartphoneanswer/app/build/outputs/apk/debug/*.apk"
