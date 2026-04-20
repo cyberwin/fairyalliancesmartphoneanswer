@@ -13,6 +13,18 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    
+     // 加这个
+    signingConfigs {
+        release {
+            def props = new Properties()
+            props.load(rootProject.file("local.properties").newDataInputStream())
+            storeFile file(props.getProperty("KEYSTORE_FILE"))
+            storePassword props.getProperty("KEYSTORE_PASSWORD")
+            keyAlias props.getProperty("KEY_ALIAS")
+            keyPassword props.getProperty("KEY_PASSWORD")
+        }
+    }
 
     buildTypes {
         release {
