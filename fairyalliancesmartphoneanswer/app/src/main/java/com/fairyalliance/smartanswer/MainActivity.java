@@ -2,6 +2,7 @@ package com.fairyalliance.smartanswer;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     @Override
