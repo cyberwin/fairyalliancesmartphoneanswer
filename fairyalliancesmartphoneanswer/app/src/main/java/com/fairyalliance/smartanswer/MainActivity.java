@@ -21,10 +21,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "加载界面失败：" + e.getMessage(), Toast.LENGTH_LONG).show();
             
             // 强制给一个纯代码界面，确保不闪退
-            android.widget.TextView tv = new android.widget.TextView(this);
-            tv.setText("APP 运行中\n错误已捕获");
-            tv.setPadding(50,50,50,50);
-            setContentView(tv);
+          //  android.widget.TextView tv = new android.widget.TextView(this);
+         //   tv.setText("APP 运行中\n错误已捕获");
+          //  tv.setPadding(50,50,50,50);
+          //  setContentView(tv);
         }
     }
 }
