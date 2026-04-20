@@ -1,4 +1,4 @@
-name: Build APK211
+name: Build & Upload to Release
 
 on:
   push:
@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -18,19 +20,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # 🔥 关键：直接用 GRADLE 8.7
       - name: Setup Gradle 8.7
         uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: 8.7
+          gradle-version: '8.7'
 
-      - name: 编译 APK
+      - name: Build Release APK
         run: |
           cd fairyalliancesmartphoneanswer
-          gradle assembleDebug
+          gradle assembleRelease
 
-      - name: 上传 APK
-        uses: actions/upload-artifact@v4
+      - name: Create Version Tag
+        id: tag
+        run: echo "tag=v$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: apk
-          path: "fairyalliancesmartphoneanswer/app/build/outputs/apk/debug/*.apk"
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: "FairyAlliance 智能接听 ${{ steps.tag.outputs.tag }}"
+          body: "自动接听 + 铃声播报 APP"
+          files: fairyalliancesmartphoneanswer/app/build/outputs/apk/release/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
