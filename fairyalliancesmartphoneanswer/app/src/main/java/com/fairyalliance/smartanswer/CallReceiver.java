@@ -32,6 +32,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.FileWriter;
 import java.util.Locale;
+
+import CyberWinPHP.Cyber_CPU.Cyber_Public_Var;
  
 public class CallReceiver extends BroadcastReceiver {
     
@@ -52,6 +54,9 @@ public class CallReceiver extends BroadcastReceiver {
     
    public String  fams_approot     = "/cyberwin/fams/famsautoanswer/";
     // ==========================================================
+    
+    public String  fams_config     = "%CyberWinPHP_root%/cyberwin/fams/famsautoanswer/config.txt"; 
+    public String  fams_phonelog     = "%CyberWinPHP_root%/cyberwin/fams/famsautoanswer/phonelog.txt"; 
 
     public String  incomingNumber   = "";
     private MediaPlayer mediaPlayer;
@@ -101,7 +106,11 @@ public class CallReceiver extends BroadcastReceiver {
                           
                           writelog("onReceive","jt","来电号码"+incomingNumber);
                           
-                          handler.postDelayed(() -> playAudioPriority(context), startTime);
+                         String fams_phonelognow=  Cyber_Public_Var.getCyberWinPath(fams_phonelog,context);
+                          
+                         appendPhoneLog(fams_phonelognow,incomingNumber);
+                          
+                         handler.postDelayed(() -> playAudioPriority(context), startTime);
                         
                     }
                 }
@@ -279,5 +288,22 @@ public class CallReceiver extends BroadcastReceiver {
             mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
         }
     }
+   //写入普通记录 
+   private void appendPhoneLog(String filePath, String content) {
+    try {
+            File file = new File(filePath);
+            // 自动创建不存在的文件
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            // 追加 + 换行
+            FileOutputStream fos = new FileOutputStream(file, true);
+            fos.write((content + "\n").getBytes());
+            fos.flush();
+            fos.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
 }
