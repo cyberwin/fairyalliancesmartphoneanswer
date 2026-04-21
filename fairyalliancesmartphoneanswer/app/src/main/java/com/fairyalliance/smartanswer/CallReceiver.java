@@ -265,7 +265,7 @@ public class CallReceiver extends BroadcastReceiver {
     private void startPlay(Context context) {
         if (mediaPlayer == null) return;
         
-        writelog("startPlay","jt","开始："+" audioFileName "+audioFileName+" rid="+resId);
+        writelog("startPlay","jt","开始："+" audioFileName "+audioFileName);
 
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         
