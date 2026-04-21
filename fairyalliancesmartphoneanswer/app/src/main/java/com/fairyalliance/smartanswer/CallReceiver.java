@@ -49,20 +49,7 @@ public class CallReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        /*
-        try {
-            if (!TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(intent.getAction()))
-                return;
-
-            incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-            String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-
-            if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-                answerCall(context);
-                handler.postDelayed(() -> playAudioPriority(context), startTime);
-            }
-        } catch (Exception e) {}
-        */
+        
          try {
             String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
             
@@ -211,6 +198,7 @@ public class CallReceiver extends BroadcastReceiver {
         // 核心日志方法：writelog(type, name, msg);
         private void writelog(String type, String name, String msg) {
             try {
+                return;
                 // 1. 时间格式化：yyyy-MM-dd HH:mm:ss
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 String time = sdf.format(new Date());
