@@ -244,4 +244,17 @@ public class CallReceiver extends BroadcastReceiver {
            // endCall(context);
         }
     }
+       // 开始播放
+    private void startPlay(Context context) {
+        if (mediaPlayer == null) return;
+
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        am.setSpeakerphoneOn("both".equals(playVoiceType));
+
+        mediaPlayer.start();
+        mediaPlayer.setOnCompletionListener(mp -> {
+            mp.release();
+            if (hangupAfterPlay) endCall(context);
+        });
+    }
 }
