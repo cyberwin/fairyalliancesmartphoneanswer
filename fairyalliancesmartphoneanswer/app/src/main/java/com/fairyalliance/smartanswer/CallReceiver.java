@@ -85,12 +85,15 @@ public class CallReceiver extends BroadcastReceiver {
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) 
                         == PackageManager.PERMISSION_GRANTED) {
                     
+                      writelog("onReceive","jt","收到电话");
+                      
                     // 使用TelecomManager接听电话
                     TelecomManager telecomManager = 
                             (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
                     
                     if (telecomManager != null) {
                         telecomManager.acceptRingingCall();
+                        
                     }
                 }
             }
@@ -152,15 +155,13 @@ public class CallReceiver extends BroadcastReceiver {
     
      // 日志根目录
         private String getLogBasePath() {
-            return Environment.getExternalStorageDirectory().getAbsolutePath() + fams_approot+"/log";
+            return Environment.getExternalStorageDirectory().getAbsolutePath() + fams_approot+"/log/";
         }
         
         // 核心日志方法：writelog(type, name, msg);
         private void writelog(String type, String name, String msg) {
             try {
-               if(1==1){
-                   return;
-               }
+               
                 // 1. 时间格式化：yyyy-MM-dd HH:mm:ss
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 String time = sdf.format(new Date());
