@@ -24,7 +24,7 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.RequiresApi;
 
-import com.ynwlzc.framework.cyberwinosand_ScreenDisplay.FullscreenActivity;
+//import com.ynwlzc.framework.cyberwinosand_ScreenDisplay.FullscreenActivity;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
