@@ -2,24 +2,31 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
    >
 
-     <!-- 电话相关 -->
+      <!-- 电话 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
 
-    <!-- 读写文件 / 磁盘 / 配置 -->
+    <!-- 存储 / 配置文件 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <!-- 通讯录 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
-    <!-- 其他 -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 电话状态 -->
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    
+    
+   
+
+   
+
+ 
+
+   
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -42,8 +49,23 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                 
             </intent-filter>
         </receiver>
+        
+        <!-- 无障碍服务（真正实现自动接听，不闪退） -->
+<service
+    android:name=".AutoCallService"
+    android:exported="false"
+    android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+    <intent-filter>
+        <action android:name="android.accessibilityservice.AccessibilityService" />
+    </intent-filter>
+    <meta-data
+        android:name="android.accessibilityservice"
+        android:resource="@xml/accessibility_service_config" />
+</service>
 
     </application>
 
