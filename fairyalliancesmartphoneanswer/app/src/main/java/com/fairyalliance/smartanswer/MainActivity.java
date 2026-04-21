@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // 跳转到无障碍设置
+            /*
             findViewById(android.R.id.content).setOnClickListener(v -> {
                 try {
                     Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "找到【智能接听】并开启", Toast.LENGTH_LONG).show();
                 } catch (Exception e) {}
             });
+            */
 
             Toast.makeText(this, "点击屏幕开启无障碍", Toast.LENGTH_SHORT).show();
 
