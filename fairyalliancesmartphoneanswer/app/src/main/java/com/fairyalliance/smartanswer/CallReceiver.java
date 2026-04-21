@@ -272,18 +272,35 @@ public class CallReceiver extends BroadcastReceiver {
         // 1. 先切到电话音频模式（关键！）
         am.setMode(AudioManager.MODE_IN_COMMUNICATION);
 
-
+        am.setMicrophoneMute(false); // = 让麦克风【不静音】= 打开麦克风
+        
         am.setSpeakerphoneOn("both".equals(playVoiceType));
 
          writelog("startPlay","jt","开始："+" 模式 "+playVoiceType);
+         
+          mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 
         mediaPlayer.start();
         
          writelog("startPlay","jt","已经开始");
          
+        
+         /*
         mediaPlayer.setOnCompletionListener(mp -> {
             mp.release();
             if (hangupAfterPlay) endCall(context);
+        });
+        */
+        mediaPlayer.setOnCompletionListener(mp -> {
+            try {
+                // 只有真正播放完成才挂断
+                if (mp.getCurrentPosition() >= mp.getDuration() - 100) {
+                    if (hangupAfterPlay) {
+                        endCall(context);
+                    }
+                }
+                mp.release();
+            } catch (Exception e) {}
         });
     }
      // ===================== 【关键：自动转换真实磁盘路径】 =====================
