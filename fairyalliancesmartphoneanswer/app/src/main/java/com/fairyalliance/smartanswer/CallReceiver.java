@@ -81,7 +81,8 @@ public class CallReceiver extends BroadcastReceiver {
             e.printStackTrace();
             
              // 记录完整异常堆栈
-            String error = e.getStackTrace()+ e.getMessage();
+             // String error = e.getStackTrace()+ e.getMessage();
+              String error = e.getMessage();
            
             writelog("onReceive", "err",  "异常：" + error);
             
@@ -136,7 +137,8 @@ public class CallReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {
                // 记录完整异常堆栈
-            String error = e.getStackTrace()+ e.getMessage();
+             // String error = e.getStackTrace()+ e.getMessage();
+              String error = e.getMessage();
            
             writelog("playAudioPriority", "err",  "异常：" + error);
             
@@ -184,7 +186,8 @@ public class CallReceiver extends BroadcastReceiver {
                 if (tm != null) tm.endCall();
             }
         } catch (Exception e) {
-             String error = e.getStackTrace()+ e.getMessage();
+             // String error = e.getStackTrace()+ e.getMessage();
+              String error = e.getMessage();
            
             writelog("endCall", "err",  "异常：" + error);
         }
@@ -198,7 +201,9 @@ public class CallReceiver extends BroadcastReceiver {
         // 核心日志方法：writelog(type, name, msg);
         private void writelog(String type, String name, String msg) {
             try {
-                return;
+               if(1==1){
+                   return;
+               }
                 // 1. 时间格式化：yyyy-MM-dd HH:mm:ss
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 String time = sdf.format(new Date());
