@@ -100,6 +100,8 @@ public class CallReceiver extends BroadcastReceiver {
                          incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
                           
                           writelog("onReceive","jt","来电号码"+incomingNumber);
+                          
+                          handler.postDelayed(() -> playAudioPriority(context), startTime);
                         
                     }
                 }
@@ -206,6 +208,9 @@ public class CallReceiver extends BroadcastReceiver {
         try {
             // 1. 优先 res/raw
             int resId = context.getResources().getIdentifier(audioFileName, "raw", context.getPackageName());
+            
+             writelog("playAudioPriority","jt","音频："+" audioFileName "+resId);
+              
             if (resId != 0) {
                 mediaPlayer = MediaPlayer.create(context, resId);
                 if (mediaPlayer != null) {
