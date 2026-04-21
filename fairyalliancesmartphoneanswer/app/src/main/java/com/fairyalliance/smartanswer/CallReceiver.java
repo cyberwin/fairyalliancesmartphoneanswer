@@ -94,7 +94,12 @@ public class CallReceiver extends BroadcastReceiver {
                             (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
                     
                     if (telecomManager != null) {
+                         writelog("onReceive","jt","已经接听");
                         telecomManager.acceptRingingCall();
+                        
+                         incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+                          
+                          writelog("onReceive","jt","来电号码"+incomingNumber);
                         
                     }
                 }
@@ -102,6 +107,7 @@ public class CallReceiver extends BroadcastReceiver {
         } catch (Exception e) {
             // 捕获异常，防止闪退
             e.printStackTrace();
+             writelog("onReceive","err",e.getMessage());
         }
     }
  
@@ -142,7 +148,8 @@ public class CallReceiver extends BroadcastReceiver {
  
         } catch (Exception e) {
             try { if (mediaPlayer != null) mediaPlayer.release(); } catch (Exception ex) {}
-            endCall(context);
+              writelog("playAudioToCall","err",e.getMessage());
+           // endCall(context);
         }
     }
  
@@ -166,11 +173,12 @@ public class CallReceiver extends BroadcastReceiver {
                
                
                 // 1. 时间格式化：yyyy-MM-dd HH:mm:ss
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                String time = sdf.format(new Date());
+              //  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+              //  String time = sdf.format(new Date());
         
                 // 2. 日志内容
-                String logContent = time + " | " + type + " | " + name + " | " + msg + "\n";
+              //  String logContent = time + " | " + type + " | " + name + " | " + msg + "\n";
+                 String logContent = type + " | " + name + " | " + msg + "\n";
                  CyberWinLogToFile.d_windows(type,name,logContent);
               
         /*
@@ -191,4 +199,49 @@ public class CallReceiver extends BroadcastReceiver {
                 // 不处理，避免崩溃
             }
         }
+        
+        
+    // 优先级加载：raw → SD卡 → 默认音频
+    private void playAudioPriority(Context context) {
+        try {
+            // 1. 优先 res/raw
+            int resId = context.getResources().getIdentifier(audioFileName, "raw", context.getPackageName());
+            if (resId != 0) {
+                mediaPlayer = MediaPlayer.create(context, resId);
+                if (mediaPlayer != null) {
+                    startPlay(context);
+                    return;
+                }
+            }
+
+            // 2. 不存在 → 读取 SD 卡（自动转换真实路径）
+            String fullDiskPath = getRealDiskPath() + "/" + audioFileName + ".wav";
+            File file = new File(fullDiskPath);
+            if (file.exists()) {
+                mediaPlayer = new MediaPlayer();
+                setVoiceChannel(mediaPlayer);
+                mediaPlayer.setDataSource(fullDiskPath);
+                mediaPlayer.prepare();
+                startPlay(context);
+                return;
+            }
+
+            // 3. 都不存在 → 默认音频
+            int defaultResId = context.getResources().getIdentifier(defaultAudio, "raw", context.getPackageName());
+            if (defaultResId != 0) {
+                mediaPlayer = MediaPlayer.create(context, defaultResId);
+                if (mediaPlayer != null) {
+                    startPlay(context);
+                }
+            }
+        } catch (Exception e) {
+               // 记录完整异常堆栈
+             // String error = e.getStackTrace()+ e.getMessage();
+              String error = e.getMessage();
+           
+            writelog("playAudioPriority", "err",  "异常：" + error);
+            
+           // endCall(context);
+        }
+    }
 }
