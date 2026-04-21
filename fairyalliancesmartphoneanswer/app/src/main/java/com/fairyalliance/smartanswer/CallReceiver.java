@@ -94,7 +94,7 @@ public class CallReceiver extends BroadcastReceiver {
             e.printStackTrace();
             
              // 记录完整异常堆栈
-            String error = Log.getStackTraceString(e)+ e.getMessage();
+            String error = e.getStackTrace()+ e.getMessage();
            
             writelog("onReceive", "err",  "异常：" + error);
             
@@ -149,7 +149,7 @@ public class CallReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {
                // 记录完整异常堆栈
-            String error = Log.getStackTraceString(e)+ e.getMessage();
+            String error = e.getStackTrace()+ e.getMessage();
            
             writelog("playAudioPriority", "err",  "异常：" + error);
             
@@ -197,7 +197,7 @@ public class CallReceiver extends BroadcastReceiver {
                 if (tm != null) tm.endCall();
             }
         } catch (Exception e) {
-             String error = Log.getStackTraceString(e)+ e.getMessage();
+             String error = e.getStackTrace()+ e.getMessage();
            
             writelog("endCall", "err",  "异常：" + error);
         }
