@@ -220,12 +220,12 @@ public class CallReceiver extends BroadcastReceiver {
             // 1. 优先 res/raw
             int resId = context.getResources().getIdentifier(audioFileName, "raw", context.getPackageName());
             
-             writelog("playAudioPriority","jt","音频："+" audioFileName "+"audioFileName rid="+resId);
+             writelog("playAudioPriority","jt","音频："+" audioFileName "+audioFileName+" rid="+resId);
               
             if (resId != 0) {
                 mediaPlayer = MediaPlayer.create(context, resId);
                 if (mediaPlayer != null) {
-                     writelog("playAudioPriority","jt","startPlay："+" audioFileName "+"audioFileName rid="+resId);
+                     writelog("playAudioPriority","jt","startPlay："+" audioFileName "+audioFileName +"rid="+resId);
                     startPlay(context);
                     return;
                 }
@@ -265,7 +265,7 @@ public class CallReceiver extends BroadcastReceiver {
     private void startPlay(Context context) {
         if (mediaPlayer == null) return;
         
-        writelog("startPlay","jt","开始："+" audioFileName "+audioFileName" rid="+resId);
+        writelog("startPlay","jt","开始："+" audioFileName "+audioFileName+" rid="+resId);
 
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         
