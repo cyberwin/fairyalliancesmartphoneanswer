@@ -45,7 +45,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
-import CyberWinPHP.Cyber_Plus.LogToFile;
+import com.fairyalliance.smartanswer.CyberWinLogToFile;
 import CyberWinPHP.Cyber_Server.MyX509TrustManager;
 
 public class Cyber_Public_Var
@@ -375,7 +375,7 @@ public class Cyber_Public_Var
 
         } catch (Exception ex) {
             // Log.e("DOWNLOAD", "error: " + ex.getMessage(), ex);
-            LogToFile.d("资源池子ex", NetPath+""+ex.getMessage());
+            CyberWinLogToFile.d("资源池子ex", NetPath+""+ex.getMessage());
         }
     }
 
