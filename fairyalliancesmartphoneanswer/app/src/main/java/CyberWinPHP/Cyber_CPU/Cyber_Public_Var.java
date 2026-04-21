@@ -51,13 +51,12 @@ import CyberWinPHP.Cyber_Server.MyX509TrustManager;
 public class Cyber_Public_Var
 {
     //未来之窗核心
-    public  static FullscreenActivity m_cpu=null;
+   // public  static FullscreenActivity m_cpu=null;
     public static Context cyber_main_instance = null;
 
     //未来之窗核心
 
-   // public static ArrayList<cyber_20190921_PrintBean> mBluetoothDevicesDatas;
-   // public static cyber_20190921_PrintAdapter adapter;
+  
     //请求的code
     public static final int REQUEST_ENABLE_BT = 1;
 
