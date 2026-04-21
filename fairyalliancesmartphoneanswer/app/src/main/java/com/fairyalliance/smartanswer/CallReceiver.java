@@ -27,6 +27,8 @@ import android.os.Environment;
 
 import java.io.File;
 
+import java.io.FileOutputStream;
+
 // 下面这4个是你必须补的
 import java.text.SimpleDateFormat;
 import java.util.Date;
