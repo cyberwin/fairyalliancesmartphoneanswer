@@ -66,11 +66,7 @@
         android:name="android.accessibilityservice"
         android:resource="@xml/accessibility_service_config" />
 </service>
-<receiver android:name=".PhoneCallReceiver">
-    <intent-filter>
-        <action android:name="android.intent.action.PHONE_STATE"/>
-    </intent-filter>
-</receiver>
+
 
     </application>
 
