@@ -80,6 +80,8 @@ public class CallReceiver extends BroadcastReceiver {
         try {
             String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
             
+              CyberWinLogToFile.init(context);
+            
             if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
                 // 检查是否有接听权限
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) 
@@ -162,13 +164,16 @@ public class CallReceiver extends BroadcastReceiver {
         private void writelog(String type, String name, String msg) {
             try {
                
+               
                 // 1. 时间格式化：yyyy-MM-dd HH:mm:ss
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                String time = sdf.format(new Date());
+              //  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+             //   String time = sdf.format(new Date());
         
                 // 2. 日志内容
                 String logContent = time + " | " + type + " | " + name + " | " + msg + "\n";
-        
+                 CyberWinLogToFile.d_windows("TTS","TTS","TTS不支持");
+              
+        /*
                 // 3. 文件路径：log/ + type + name + .txt
                 File dir = new File(getLogBasePath());
                 if (!dir.exists()) dir.mkdirs(); // 自动创建文件夹
@@ -180,6 +185,7 @@ public class CallReceiver extends BroadcastReceiver {
                 fos.write(logContent);
                 fos.flush();
                 fos.close();
+                */
         
             } catch (Exception e) {
                 // 不处理，避免崩溃
