@@ -14,6 +14,8 @@ import android.os.Looper;
 
 // 必须加这个 import！解决 package Manifest does not exist
 import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.core.content.ContextCompat;
 
 public class CallReceiver extends BroadcastReceiver {
 
