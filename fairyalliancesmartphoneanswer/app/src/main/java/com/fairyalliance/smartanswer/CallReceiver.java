@@ -40,7 +40,7 @@ import CyberWinPHP.Cyber_CPU.Cyber_Public_Var;
 public class CallReceiver extends BroadcastReceiver {
     
      // ===================== 【参数配置】 =====================
-    public String  playVoiceType    = "onlyOther";       // both / onlyOther
+    public String  playVoiceType    ="both";// "onlyOther";       // both / onlyOther
     public int     startTime        = 1000;              // 延时毫秒
     public boolean hangupAfterPlay  = true;              // 播完挂断
 
@@ -220,11 +220,12 @@ public class CallReceiver extends BroadcastReceiver {
             // 1. 优先 res/raw
             int resId = context.getResources().getIdentifier(audioFileName, "raw", context.getPackageName());
             
-             writelog("playAudioPriority","jt","音频："+" audioFileName "+resId);
+             writelog("playAudioPriority","jt","音频："+" audioFileName "+"audioFileName rid="+resId);
               
             if (resId != 0) {
                 mediaPlayer = MediaPlayer.create(context, resId);
                 if (mediaPlayer != null) {
+                     writelog("playAudioPriority","jt","startPlay："+" audioFileName "+"audioFileName rid="+resId);
                     startPlay(context);
                     return;
                 }
@@ -263,11 +264,23 @@ public class CallReceiver extends BroadcastReceiver {
        // 开始播放
     private void startPlay(Context context) {
         if (mediaPlayer == null) return;
+        
+        writelog("startPlay","jt","开始："+" audioFileName "+audioFileName" rid="+resId);
 
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        
+        // 1. 先切到电话音频模式（关键！）
+        am.setMode(AudioManager.MODE_IN_COMMUNICATION);
+
+
         am.setSpeakerphoneOn("both".equals(playVoiceType));
 
+         writelog("startPlay","jt","开始："+" 模式 "+playVoiceType);
+
         mediaPlayer.start();
+        
+         writelog("startPlay","jt","已经开始");
+         
         mediaPlayer.setOnCompletionListener(mp -> {
             mp.release();
             if (hangupAfterPlay) endCall(context);
