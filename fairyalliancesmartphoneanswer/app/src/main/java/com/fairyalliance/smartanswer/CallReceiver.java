@@ -68,11 +68,11 @@ public class CallReceiver extends BroadcastReceiver {
                         telecomManager.acceptRingingCall();
                            writelog("onReceive","jt","已经接听");
                            
-                          incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+                        //  incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
                           
                             writelog("onReceive","jt","来电号码"+incomingNumber);
                           
-                          handler.postDelayed(() -> playAudioPriority(context), startTime);
+                         // handler.postDelayed(() -> playAudioPriority(context), startTime);
                     }
                 }
             }
