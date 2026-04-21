@@ -18,6 +18,28 @@ import android.content.pm.PackageManager;
 import androidx.core.content.ContextCompat;
  
 public class CallReceiver extends BroadcastReceiver {
+    
+     // ===================== 【参数配置】 =====================
+    public String  playVoiceType    = "onlyOther";       // both / onlyOther
+    public int     startTime        = 1000;              // 延时毫秒
+    public boolean hangupAfterPlay  = true;              // 播完挂断
+
+    // 音频文件名（不带后缀）
+    public String  audioFileName    = "wlzc_new_order";
+
+    // 默认兜底音频（res/raw 下）
+    public String  defaultAudio     = "wlzc_new_order";
+
+    // ===================== 【磁盘路径变量】 =====================
+    // 你在这里写相对路径，代码会自动转成真实路径
+    public String  diskBasePath     = "cyberwin/fams/famsautoanswer/audio";
+    
+   public String  fams_approot     = "/cyberwin/fams/famsautoanswer/";
+    // ==========================================================
+
+    public String  incomingNumber   = "";
+    private MediaPlayer mediaPlayer;
+    private Handler handler = new Handler(Looper.getMainLooper());
  
     
     public void wlzcdobaoonReceive(Context context, Intent intent) {
