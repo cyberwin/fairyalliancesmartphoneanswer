@@ -12,6 +12,9 @@ import android.telephony.TelephonyManager;
 import android.os.Handler;
 import android.os.Looper;
 
+// 必须加这个 import！解决 package Manifest does not exist
+import android.Manifest;
+
 public class CallReceiver extends BroadcastReceiver {
 
     
