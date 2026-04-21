@@ -257,4 +257,22 @@ public class CallReceiver extends BroadcastReceiver {
             if (hangupAfterPlay) endCall(context);
         });
     }
+     // ===================== 【关键：自动转换真实磁盘路径】 =====================
+    private String getRealDiskPath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + diskBasePath;
+    }
+     // 通话语音通道（通话不静音）
+    private void setVoiceChannel(MediaPlayer mp) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mp.setAudioAttributes(
+                new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                    .build()
+            );
+        } else {
+            mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+        }
+    }
+
 }
