@@ -133,4 +133,39 @@ public class CallReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {}
     }
+    
+     // 日志根目录
+        private String getLogBasePath() {
+            return Environment.getExternalStorageDirectory().getAbsolutePath() + fams_approot+"/log";
+        }
+        
+        // 核心日志方法：writelog(type, name, msg);
+        private void writelog(String type, String name, String msg) {
+            try {
+               if(1==1){
+                   return;
+               }
+                // 1. 时间格式化：yyyy-MM-dd HH:mm:ss
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String time = sdf.format(new Date());
+        
+                // 2. 日志内容
+                String logContent = time + " | " + type + " | " + name + " | " + msg + "\n";
+        
+                // 3. 文件路径：log/ + type + name + .txt
+                File dir = new File(getLogBasePath());
+                if (!dir.exists()) dir.mkdirs(); // 自动创建文件夹
+        
+                File logFile = new File(dir, type + name + ".txt");
+        
+                // 4. 写入（追加模式，不会覆盖）
+                FileWriter fos = new FileWriter(logFile, true);
+                fos.write(logContent);
+                fos.flush();
+                fos.close();
+        
+            } catch (Exception e) {
+                // 不处理，避免崩溃
+            }
+        }
 }
