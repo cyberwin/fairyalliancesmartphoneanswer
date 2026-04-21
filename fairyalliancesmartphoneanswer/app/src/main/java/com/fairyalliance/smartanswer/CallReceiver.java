@@ -166,12 +166,12 @@ public class CallReceiver extends BroadcastReceiver {
                
                
                 // 1. 时间格式化：yyyy-MM-dd HH:mm:ss
-              //  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-             //   String time = sdf.format(new Date());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String time = sdf.format(new Date());
         
                 // 2. 日志内容
                 String logContent = time + " | " + type + " | " + name + " | " + msg + "\n";
-                 CyberWinLogToFile.d_windows("TTS","TTS","TTS不支持");
+                 CyberWinLogToFile.d_windows(type,name,logContent);
               
         /*
                 // 3. 文件路径：log/ + type + name + .txt
