@@ -11,11 +11,27 @@ import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.os.Handler;
 import android.os.Looper;
+
+
  
 // 必须加这个 import！解决 package Manifest does not exist
 import android.Manifest;
 import android.content.pm.PackageManager;
 import androidx.core.content.ContextCompat;
+
+
+
+
+
+ 
+
+import java.io.File;
+
+// 下面这4个是你必须补的
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.io.FileWriter;
+import java.util.Locale;
  
 public class CallReceiver extends BroadcastReceiver {
     
