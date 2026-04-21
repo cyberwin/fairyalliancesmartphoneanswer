@@ -25,9 +25,11 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
 
             // 申请存储、通讯录权限
+            /*
             if (Build.VERSION.SDK_INT >= 23) {
                 requestPermissions(PERMISSIONS, 100);
             }
+            */
 
             // 跳转到无障碍设置
             /*
