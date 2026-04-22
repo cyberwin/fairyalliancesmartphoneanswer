@@ -214,7 +214,8 @@ public class CallReceiver extends BroadcastReceiver {
                 mediaPlayer = MediaPlayer.create(context, resId);
                 if (mediaPlayer != null) {
                      writelog("playAudioPriority","jt","startPlay："+" audioFileName "+audioFileName +"rid="+resId);
-                      setVoiceChannel(mediaPlayer);
+                    //  setVoiceChannel(mediaPlayer);
+                    未来之窗_设置接电话MediaPlayer(mediaPlayer);
                     startPlay(context);
                     return;
                 }
@@ -269,6 +270,8 @@ public class CallReceiver extends BroadcastReceiver {
          writelog("startPlay","jt","开始："+" 模式 "+playVoiceType);
          
           mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+          
+         未来之窗_设置接电话AudioManager(am);
 
         mediaPlayer.start();
         
@@ -350,6 +353,18 @@ public class CallReceiver extends BroadcastReceiver {
         } catch (Exception e) {
             writelog("releaseAudioResources", "err", e.getMessage());
         }
+    }
+    
+    private void 未来之窗_设置接电话MediaPlayer(MediaPlayer mp) {
+       // mp.setMode(AudioManager.MODE_IN_CALL);
+          mp.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH);
+          mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+          mp.setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+    }
+    
+    private void 未来之窗_设置接电话AudioManager(AudioManager am) {
+        am.setMode(AudioManager.MODE_IN_CALL);
+        am.setSpeakerphoneOn(true);
     }
 
 }
