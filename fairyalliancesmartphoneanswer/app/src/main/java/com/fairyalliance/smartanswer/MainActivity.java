@@ -42,6 +42,11 @@ import android.view.View;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+ 
+ 
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] PERMISSIONS_老的 = {
@@ -254,6 +259,40 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "播放失败：音频文件不存在", Toast.LENGTH_SHORT).show();
         }
+    }
+    
+     public void playAudio2byphone(View view) {
+        
+         try {
+        // 先释放上一个
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
+        int resId = getResources().getIdentifier(audioFileName2, "raw", getPackageName());
+        mediaPlayer = MediaPlayer.create(this, resId);
+
+        // ======================
+        // 关键：强制使用 电话通话声道
+        // ======================
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mediaPlayer.setAudioAttributes(
+                new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION) // 电话通道
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .build()
+            );
+        } else {
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL); // 旧版本
+        }
+
+        mediaPlayer.start();
+        Toast.makeText(this, "电话通道播放：" + audioFileName2, Toast.LENGTH_SHORT).show();
+
+    } catch (Exception e) {
+        Toast.makeText(this, "播放失败", Toast.LENGTH_SHORT).show();
+    }
     }
     
       // ---------------------- 权限授权 ----------------------
