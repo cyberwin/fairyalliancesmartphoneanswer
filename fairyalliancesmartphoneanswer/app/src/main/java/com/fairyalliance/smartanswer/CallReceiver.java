@@ -357,9 +357,24 @@ public class CallReceiver extends BroadcastReceiver {
     
     private void 未来之窗_设置接电话MediaPlayer(MediaPlayer mp) {
        // mp.setMode(AudioManager.MODE_IN_CALL);
-          mp.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH);
-          mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-          mp.setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION);
+         // mp.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH);
+        //  mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+        //  mp.setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION);
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        // 5.0以上：打包成 AudioAttributes 一起设置
+                 writelog("未来之窗vers", "版本", "5.0以上");
+                mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                mp.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                        .build()
+                );
+            } else {
+                // 5.0以下：老方法
+                 writelog("未来之窗vers", "版本", "5.0以下：老方法");
+                mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+            }
     }
     
     private void 未来之窗_设置接电话AudioManager(AudioManager am) {
