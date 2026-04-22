@@ -92,8 +92,9 @@ public class CallReceiver extends BroadcastReceiver {
               CyberWinLogToFile.init(context);
               
               
-               switch (state) {
-                case TelephonyManager.EXTRA_STATE_RINGING://TelephonyManager.CALL_STATE_RINGING:
+              
+               // case TelephonyManager.EXTRA_STATE_RINGING://TelephonyManager.CALL_STATE_RINGING:
+                if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) 
                     // 来电响铃状态
                     {
                          writelog("onReceive","jt","来电响铃状态");
@@ -117,29 +118,28 @@ public class CallReceiver extends BroadcastReceiver {
                                 }
                     }
                     
-                    break;
                     
-                case TelephonyManager.EXTRA_STATE_OFFHOOK://TelephonyManager.CALL_STATE_OFFHOOK:
+                    
+               // case TelephonyManager.EXTRA_STATE_OFFHOOK://TelephonyManager.CALL_STATE_OFFHOOK:
+                if (TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) 
                     // 通话接通状态
                     {
                          writelog("onReceive","jt","通话接通状态");
                           handler.postDelayed(() -> playAudioPriority(context), startTime);
                     }
                     
-                    break;
+                  
                     
-                case TelephonyManager.EXTRA_STATE_IDLE://TelephonyManager.CALL_STATE_IDLE:
+              //  case TelephonyManager.EXTRA_STATE_IDLE://TelephonyManager.CALL_STATE_IDLE:
                     // 通话结束状态
-                    {
+                     if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
                          writelog("onReceive","jt","通话结束状态");
                           releaseAudioResources();
                     }
                     
-                    break;
                     
-                default:
-                    break;
-            }
+                    
+              
             /*
             if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
                 // 检查是否有接听权限
