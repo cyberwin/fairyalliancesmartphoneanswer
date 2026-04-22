@@ -279,6 +279,7 @@ public class CallReceiver extends BroadcastReceiver {
                 mediaPlayer = MediaPlayer.create(context, resId);
                 if (mediaPlayer != null) {
                      writelog("playAudioPriority","jt","startPlay："+" audioFileName "+audioFileName +"rid="+resId);
+                      setVoiceChannel(mediaPlayer);
                     startPlay(context);
                     return;
                 }
@@ -301,6 +302,7 @@ public class CallReceiver extends BroadcastReceiver {
             if (defaultResId != 0) {
                 mediaPlayer = MediaPlayer.create(context, defaultResId);
                 if (mediaPlayer != null) {
+                     setVoiceChannel(mediaPlayer);
                     startPlay(context);
                 }
             }
