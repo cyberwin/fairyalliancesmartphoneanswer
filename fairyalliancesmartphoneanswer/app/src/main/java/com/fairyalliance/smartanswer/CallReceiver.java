@@ -359,7 +359,7 @@ public class CallReceiver extends BroadcastReceiver {
        // mp.setMode(AudioManager.MODE_IN_CALL);
           mp.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH);
           mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-          mp.setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+          mp.setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION);
     }
     
     private void 未来之窗_设置接电话AudioManager(AudioManager am) {
