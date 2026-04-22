@@ -27,6 +27,21 @@ import androidx.core.content.ContextCompat;
 
 import CyberWinPHP.Cyber_CPU.Cyber_Public_Var;
 
+
+ 
+import android.content.Context;
+import android.content.Intent;
+ 
+import android.media.MediaPlayer;
+ 
+ 
+import android.view.View;
+ 
+ 
+ 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] PERMISSIONS = {
@@ -40,6 +55,14 @@ public class MainActivity extends AppCompatActivity {
        private static final int REQUEST_MANAGE_ALL_FILES_PERMISSION = 4;
        
        private static final int PERMISSION_CODE = 100;
+       
+        // 音频文件名（res/raw 目录下）
+    public String audioFileName  = "fams_aa_dc_01";
+    public String defaultAudio   = "fams_aa_default";
+    public String audioFileName2 = "fams_aa_jyyq_01";
+    public String audioFileName3 = "fams_aa_default";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,4 +213,61 @@ public class MainActivity extends AppCompatActivity {
                 // 不处理，避免崩溃
             }
         }
+        
+        //2026-04-23
+        
+    // ---------------------- 音频播放 ----------------------
+    public void playDefaultAudio(View view) {
+        playRawAudio(defaultAudio);
+    }
+
+    public void playAudio2(View view) {
+        playRawAudio(audioFileName2);
+    }
+
+    public void playAudio3(View view) {
+        playRawAudio(audioFileName3);
+    }
+
+    // 播放 raw 下的音频（通用方法）
+    private void playRawAudio(String fileName) {
+        try {
+            // 先停止上一个
+            if (mediaPlayer != null) {
+                mediaPlayer.release();
+            }
+
+            // 获取音频 ID
+            int resId = getResources().getIdentifier(fileName, "raw", getPackageName());
+            mediaPlayer = MediaPlayer.create(this, resId);
+            mediaPlayer.start();
+            Toast.makeText(this, "正在播放：" + fileName, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "播放失败：音频文件不存在", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+      // ---------------------- 权限授权 ----------------------
+    public void grantStoragePermission(View view) {
+        /*
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERM_CODE);
+        } else {
+            Toast.makeText(this, "文件权限已授权", Toast.LENGTH_SHORT).show();
+        }
+        */
+        仙盟_权限_判断_文件权限();
+    }
+
+    public void grantAllPermissions(View view) {
+          ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_CODE);
+        /*
+        if (!hasAllPermissions()) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, ALL_PERM_CODE);
+        } else {
+            Toast.makeText(this, "全部权限已授权", Toast.LENGTH_SHORT).show();
+        }
+        */
+    }
+    
 }
