@@ -44,7 +44,7 @@ import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String[] PERMISSIONS = {
+    private static final String[] PERMISSIONS_老的 = {
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -52,6 +52,15 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.WRITE_CONTACTS
     };
     
+    // 仅保留 能动态授权、必须授权、不会失效 的权限
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.READ_PHONE_STATE,    // 必须：检测来电
+            Manifest.permission.READ_CONTACTS,       // 必须：读取联系人
+            Manifest.permission.WRITE_CONTACTS,      // 可选：修改联系人
+            Manifest.permission.READ_EXTERNAL_STORAGE ,// 必须：读取文件/录音
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
+        
        private static final int REQUEST_MANAGE_ALL_FILES_PERMISSION = 4;
        
        private static final int PERMISSION_CODE = 100;
