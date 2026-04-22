@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public String audioFileName2 = "fams_aa_jyyq_01";
     public String audioFileName3 = "fams_aa_default";
 
-
+       private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
