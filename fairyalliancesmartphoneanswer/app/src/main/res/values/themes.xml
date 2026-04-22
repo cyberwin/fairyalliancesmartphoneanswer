@@ -3,5 +3,5 @@
 
     <style name="Theme.Fairyalliancesmartphoneanswer_error" parent="android:Theme.Material.Light.NoActionBar" />
     
-     <style name="Theme.Fairyalliancesmartphoneanswer" parent="Theme.MaterialComponents.DayNight.DarkActionBar" />
+     <style name="Theme.Fairyalliancesmartphoneanswer"  parent="Theme.AppCompat.Light.NoActionBar" />
 </resources>
