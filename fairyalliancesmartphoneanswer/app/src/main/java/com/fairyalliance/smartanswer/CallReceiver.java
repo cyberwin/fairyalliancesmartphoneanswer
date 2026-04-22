@@ -302,7 +302,7 @@ public class CallReceiver extends BroadcastReceiver {
             fos.close();
     } catch (Exception e) {
         
-         writelog("error", "appendPhoneLog",  "异常：" + e.getMessage());
+         writelog("error", "appendPhoneLog",  "异常：" +"filePath="+filePath+","+ e.getMessage());
     }
     
     
