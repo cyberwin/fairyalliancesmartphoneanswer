@@ -65,24 +65,7 @@ public class CallReceiver extends BroadcastReceiver {
     private Handler handler = new Handler(Looper.getMainLooper());
  
     
-    public void wlzcdobaoonReceive(Context context, Intent intent) {
-        try {
-            if (!TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(intent.getAction())) return;
- 
-            String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-            
-          
-            if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-                answerCall(context);
- 
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    try {
-                        playAudioToCall(context);
-                    } catch (Exception e) {}
-                }, 1000);
-            }
-        } catch (Exception e) {}
-    }
+     
     
      @Override
     public void onReceive(Context context, Intent intent) {
@@ -140,36 +123,7 @@ public class CallReceiver extends BroadcastReceiver {
                     
                     
               
-            /*
-            if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-                // 检查是否有接听权限
-                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) 
-                        == PackageManager.PERMISSION_GRANTED) {
-                    
-                      writelog("onReceive","jt","收到电话");
-                      
-                    // 使用TelecomManager接听电话
-                    TelecomManager telecomManager = 
-                            (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
-                    
-                    if (telecomManager != null) {
-                         writelog("onReceive","jt","已经接听");
-                        telecomManager.acceptRingingCall();
-                        
-                         incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-                          
-                          writelog("onReceive","jt","来电号码"+incomingNumber);
-                          
-                         String fams_phonelognow=  Cyber_Public_Var.getCyberWinPath(fams_phonelog,context);
-                          
-                         appendPhoneLog(fams_phonelognow,incomingNumber);
-                          
-                         handler.postDelayed(() -> playAudioPriority(context), startTime);
-                        
-                    }
-                }
-            }
-            */
+          
         } catch (Exception e) {
             // 捕获异常，防止闪退
             e.printStackTrace();
@@ -177,14 +131,7 @@ public class CallReceiver extends BroadcastReceiver {
         }
     }
  
-    private void answerCall(Context context) {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
-                if (tm != null) tm.acceptRingingCall();
-            }
-        } catch (Exception e) {}
-    }
+   
  
     private void playAudioToCall(Context context) {
         MediaPlayer mediaPlayer = null;
@@ -247,19 +194,7 @@ public class CallReceiver extends BroadcastReceiver {
                  String logContent = type + " | " + name + " | " + msg + "\n";
                  CyberWinLogToFile.d_windows(type,name,logContent);
               
-        /*
-                // 3. 文件路径：log/ + type + name + .txt
-                File dir = new File(getLogBasePath());
-                if (!dir.exists()) dir.mkdirs(); // 自动创建文件夹
         
-                File logFile = new File(dir, type + name + ".txt");
-        
-                // 4. 写入（追加模式，不会覆盖）
-                FileWriter fos = new FileWriter(logFile, true);
-                fos.write(logContent);
-                fos.flush();
-                fos.close();
-                */
         
             } catch (Exception e) {
                 // 不处理，避免崩溃
