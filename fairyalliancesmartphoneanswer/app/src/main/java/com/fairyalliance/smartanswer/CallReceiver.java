@@ -41,7 +41,7 @@ public class CallReceiver extends BroadcastReceiver {
     
      // ===================== 【参数配置】 =====================
     public String  playVoiceType    ="both";// "onlyOther";       // both / onlyOther
-    public int     startTime        = 1000;              // 延时毫秒
+    public int     startTime        =10;// 1000;              // 延时毫秒
     public boolean hangupAfterPlay  = true;              // 播完挂断
 
     // 音频文件名（不带后缀）
@@ -70,6 +70,8 @@ public class CallReceiver extends BroadcastReceiver {
             if (!TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(intent.getAction())) return;
  
             String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+            
+          
             if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
                 answerCall(context);
  
@@ -88,7 +90,57 @@ public class CallReceiver extends BroadcastReceiver {
             String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
             
               CyberWinLogToFile.init(context);
-            
+              
+              
+               switch (state) {
+                case TelephonyManager.CALL_STATE_RINGING:
+                    // 来电响铃状态
+                    {
+                         writelog("onReceive","jt","来电响铃状态");
+                         // 使用TelecomManager接听电话
+                           TelecomManager telecomManager = 
+                            (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
+                             if (telecomManager != null) {
+                                     writelog("onReceive","jt","已经接听");
+                                    telecomManager.acceptRingingCall();
+                                    
+                                     incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+                                      
+                                      writelog("onReceive","jt","来电号码"+incomingNumber);
+                                      
+                                     String fams_phonelognow=  Cyber_Public_Var.getCyberWinPath(fams_phonelog,context);
+                                      
+                                     appendPhoneLog(fams_phonelognow,incomingNumber);
+                                      
+                                  //   handler.postDelayed(() -> playAudioPriority(context), startTime);
+                                    
+                                }
+                    }
+                    
+                    break;
+                    
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    // 通话接通状态
+                    {
+                         writelog("onReceive","jt","通话接通状态");
+                          handler.postDelayed(() -> playAudioPriority(context), startTime);
+                    }
+                    
+                    break;
+                    
+                case TelephonyManager.CALL_STATE_IDLE:
+                    // 通话结束状态
+                    {
+                         writelog("onReceive","jt","通话结束状态");
+                          releaseAudioResources();
+                    }
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+            /*
             if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
                 // 检查是否有接听权限
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) 
@@ -117,6 +169,7 @@ public class CallReceiver extends BroadcastReceiver {
                     }
                 }
             }
+            */
         } catch (Exception e) {
             // 捕获异常，防止闪退
             e.printStackTrace();
@@ -336,6 +389,30 @@ public class CallReceiver extends BroadcastReceiver {
     } catch (Exception e) {
         e.printStackTrace();
     }
-}
+    
+    
+   }
+   
+   // 释放音频资源（你缺失的方法）
+    private void releaseAudioResources() {
+        try {
+            // 1. 移除所有延迟播放任务
+            handler.removeCallbacksAndMessages(null);
+    
+            // 2. 释放 MediaPlayer
+            if (mediaPlayer != null) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                }
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
+    
+            writelog("releaseAudioResources", "jt", "音频资源已释放");
+    
+        } catch (Exception e) {
+            writelog("releaseAudioResources", "err", e.getMessage());
+        }
+    }
 
 }
