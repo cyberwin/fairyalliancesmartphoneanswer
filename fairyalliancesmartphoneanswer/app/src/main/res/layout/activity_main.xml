@@ -32,6 +32,13 @@
         android:layout_height="wrap_content"
         android:text="播放应答 3"
         android:onClick="playAudio3"/>
+        
+        
+        <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="接听模式 2"
+        android:onClick="playAudio2byphone"/>
 
     <Button
         android:layout_width="match_parent"
