@@ -45,10 +45,12 @@ public class CallReceiver extends BroadcastReceiver {
     public boolean hangupAfterPlay  = true;              // 播完挂断
 
     // 音频文件名（不带后缀）
-    public String  audioFileName    = "wlzc_new_order";
+    public String  audioFileName    = "fams_aa_jyyq_01";
 
     // 默认兜底音频（res/raw 下）
-    public String  defaultAudio     = "wlzc_new_order";
+    public String  defaultAudio     = "fams_aa_default";
+    
+    //fams_aa_default.mp3  fams_aa_jyyq_01.mp3
 
     // ===================== 【磁盘路径变量】 =====================
     // 你在这里写相对路径，代码会自动转成真实路径
