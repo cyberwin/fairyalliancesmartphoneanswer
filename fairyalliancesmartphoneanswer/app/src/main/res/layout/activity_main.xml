@@ -12,7 +12,44 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fairy Alliance 智能接听已运行"
+        android:text="Fairy Alliance answer"
+        android:textSize="22sp"/>
+        
+          <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="播放应答默认语音"
+        android:onClick="playDefaultAudio"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="播放应答 2"
+        android:onClick="playAudio2"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="播放应答 3"
+        android:onClick="playAudio3"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="授权文件权限"
+        android:onClick="grantStoragePermission"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="授权全部权限"
+        android:onClick="grantAllPermissions"/>
+        
+        
+         <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fairy Alliance 东方仙盟 5400款应用 混沌系统"
         android:textSize="22sp"/>
 
 </LinearLayout>
