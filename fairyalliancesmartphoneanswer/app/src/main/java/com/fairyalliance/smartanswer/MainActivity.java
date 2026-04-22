@@ -8,6 +8,14 @@ import android.provider.Settings;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.os.Environment;
+ 
+
+import java.io.File;
+
+import java.io.FileOutputStream;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] PERMISSIONS = {
@@ -19,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     };
     
        private static final int REQUEST_MANAGE_ALL_FILES_PERMISSION = 4;
+       
+       private static final int PERMISSION_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
