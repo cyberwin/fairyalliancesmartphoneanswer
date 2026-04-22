@@ -16,6 +16,11 @@ import java.io.File;
 
 import java.io.FileOutputStream;
 
+import android.content.pm.PackageManager;
+
+
+import androidx.annotation.NonNull;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] PERMISSIONS = {
