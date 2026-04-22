@@ -24,6 +24,9 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+
+import CyberWinPHP.Cyber_CPU.Cyber_Public_Var;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] PERMISSIONS = {
@@ -42,23 +45,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
+            
+             CyberWinLogToFile.init(context);
+             
+             writelog("MainActivity","jt","启动开始");
+             
             setContentView(R.layout.activity_main);
+            
+              writelog("MainActivity","jt","布局");
 
             // 申请存储、通讯录权限
             // 检查并申请权限
+            /*
         if (!hasPermissions()) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_CODE);
         }
-           
+           */
 
             Toast.makeText(this, "点击屏幕开启无障碍", Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
-            // 绝不闪退
-           // android.widget.TextView tv = new android.widget.TextView(this);
-           // tv.setText("点击开启无障碍");
-           // tv.setPadding(50,50,50,50);
-           // setContentView(tv);
+            writelog("MainActivity","jt","布局"+ e.getMessage());
         }
     }
     
@@ -162,4 +169,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    
+     // 核心日志方法：writelog(type, name, msg);
+        private void writelog(String type, String name, String msg) {
+            try {
+               
+               
+                // 1. 时间格式化：yyyy-MM-dd HH:mm:ss
+              //  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+              //  String time = sdf.format(new Date());
+        
+                // 2. 日志内容
+              //  String logContent = time + " | " + type + " | " + name + " | " + msg + "\n";
+                 String logContent = type + " | " + name + " | " + msg + "\n";
+                 CyberWinLogToFile.d_windows(type,name,logContent);
+              
+        
+        
+            } catch (Exception e) {
+                // 不处理，避免崩溃
+            }
+        }
 }
