@@ -126,45 +126,15 @@ public class CallReceiver extends BroadcastReceiver {
           
         } catch (Exception e) {
             // 捕获异常，防止闪退
-            e.printStackTrace();
-             writelog("onReceive","err",e.getMessage());
+           // e.printStackTrace();
+            
+               writelog("error", "onReceive",  "异常：" + e.getMessage());
         }
     }
  
    
  
-    private void playAudioToCall(Context context) {
-        MediaPlayer mediaPlayer = null;
-        try {
-            mediaPlayer = MediaPlayer.create(context, R.raw.wlzc_new_order);
-            if (mediaPlayer == null) {
-                endCall(context);
-                return;
-            }
- 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mediaPlayer.setAudioAttributes(
-                        new AudioAttributes.Builder()
-                                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
-                                .build()
-                );
-            } else {
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-            }
- 
-            mediaPlayer.start();
-            mediaPlayer.setOnCompletionListener(mp -> {
-                mp.release();
-                endCall(context);
-            });
- 
-        } catch (Exception e) {
-            try { if (mediaPlayer != null) mediaPlayer.release(); } catch (Exception ex) {}
-              writelog("playAudioToCall","err",e.getMessage());
-           // endCall(context);
-        }
-    }
+   
  
     private void endCall(Context context) {
         try {
@@ -172,7 +142,9 @@ public class CallReceiver extends BroadcastReceiver {
                 TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
                 if (tm != null) tm.endCall();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+              writelog("error", "endCall",  "异常：" + e.getMessage());
+        }
     }
     
      // 日志根目录
@@ -247,7 +219,7 @@ public class CallReceiver extends BroadcastReceiver {
              // String error = e.getStackTrace()+ e.getMessage();
               String error = e.getMessage();
            
-            writelog("playAudioPriority", "err",  "异常：" + error);
+            writelog("error", "playAudioPriority",  "异常：" + error);
             
            // endCall(context);
         }
@@ -293,7 +265,9 @@ public class CallReceiver extends BroadcastReceiver {
                     }
                 }
                 mp.release();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                 writelog("error", "startPlay",  "异常：" + e.getMessage());
+            }
         });
     }
      // ===================== 【关键：自动转换真实磁盘路径】 =====================
@@ -327,7 +301,8 @@ public class CallReceiver extends BroadcastReceiver {
             fos.flush();
             fos.close();
     } catch (Exception e) {
-        e.printStackTrace();
+        
+         writelog("error", "appendPhoneLog",  "异常：" + e.getMessage());
     }
     
     
@@ -351,7 +326,8 @@ public class CallReceiver extends BroadcastReceiver {
             writelog("releaseAudioResources", "jt", "音频资源已释放");
     
         } catch (Exception e) {
-            writelog("releaseAudioResources", "err", e.getMessage());
+           
+             writelog("error", "releaseAudioResources",  "异常：" + e.getMessage());
         }
     }
     
