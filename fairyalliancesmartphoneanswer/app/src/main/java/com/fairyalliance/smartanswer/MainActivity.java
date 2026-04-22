@@ -21,6 +21,9 @@ import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] PERMISSIONS = {
