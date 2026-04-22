@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         try {
             
-             CyberWinLogToFile.init(context);
+             CyberWinLogToFile.init(this);
              
              writelog("MainActivity","jt","启动开始");
              
