@@ -93,7 +93,7 @@ public class CallReceiver extends BroadcastReceiver {
               
               
                switch (state) {
-                case TelephonyManager.CALL_STATE_RINGING:
+                case TelephonyManager.EXTRA_STATE_RINGING://TelephonyManager.CALL_STATE_RINGING:
                     // 来电响铃状态
                     {
                          writelog("onReceive","jt","来电响铃状态");
@@ -119,7 +119,7 @@ public class CallReceiver extends BroadcastReceiver {
                     
                     break;
                     
-                case TelephonyManager.CALL_STATE_OFFHOOK:
+                case TelephonyManager.EXTRA_STATE_OFFHOOK://TelephonyManager.CALL_STATE_OFFHOOK:
                     // 通话接通状态
                     {
                          writelog("onReceive","jt","通话接通状态");
@@ -128,7 +128,7 @@ public class CallReceiver extends BroadcastReceiver {
                     
                     break;
                     
-                case TelephonyManager.CALL_STATE_IDLE:
+                case TelephonyManager.EXTRA_STATE_IDLE://TelephonyManager.CALL_STATE_IDLE:
                     // 通话结束状态
                     {
                          writelog("onReceive","jt","通话结束状态");
