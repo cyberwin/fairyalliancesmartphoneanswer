@@ -279,6 +279,9 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer.release();
             mediaPlayer = null;
         }
+        
+          AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+           未来之窗_设置接电话AudioManager(am);
 
         int resId = getResources().getIdentifier(audioFileName2, "raw", getPackageName());
         mediaPlayer = MediaPlayer.create(this, resId);
@@ -293,9 +296,12 @@ public class MainActivity extends AppCompatActivity {
                     .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                     .build()
             );
+            
         } else {
+           
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL); // 旧版本
         }
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL); // 设置音频流为通话流
 
         mediaPlayer.start();
         Toast.makeText(this, "电话通道播放：" + audioFileName2, Toast.LENGTH_SHORT).show();
@@ -303,6 +309,12 @@ public class MainActivity extends AppCompatActivity {
     } catch (Exception e) {
         Toast.makeText(this, "播放失败", Toast.LENGTH_SHORT).show();
     }
+    }
+    
+     private void 未来之窗_设置接电话AudioManager(AudioManager am) {
+        am.setMode(AudioManager.MODE_IN_CALL);
+        am.setMode(AudioManager.MODE_IN_COMMUNICATION);
+        am.setSpeakerphoneOn(true);
     }
     
       // ---------------------- 权限授权 ----------------------
