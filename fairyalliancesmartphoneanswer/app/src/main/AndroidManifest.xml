@@ -47,7 +47,15 @@
  
 <!--通话状态修改兜底兼容权限-->
 <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
-   
+
+ 
+ 
+ 
+ 
+<!--本地局域网HTTP推送号码时间专属权限-->
+<uses-permission android:name="android.permission.INTERNET" />
+<!--安卓10明文本地http局域网请求全局放行配置，application标签内添加-->
+
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -56,6 +64,9 @@
         android:supportsRtl="true"
         android:allowBackup="true"
         android:theme="@style/Theme.Fairyalliancesmartphoneanswer"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
+   
          >
 
         <activity android:name=".MainActivity" android:exported="true"
