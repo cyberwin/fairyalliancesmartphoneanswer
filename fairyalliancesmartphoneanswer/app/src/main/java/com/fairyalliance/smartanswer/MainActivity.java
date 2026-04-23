@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer = null;
         }
         
-          AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+          AudioManager am = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
            未来之窗_设置接电话AudioManager(am);
 
         int resId = getResources().getIdentifier(audioFileName2, "raw", getPackageName());
