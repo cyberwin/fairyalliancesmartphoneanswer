@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
     public String defaultAudio   = "fams_aa_default";
     public String audioFileName2 = "fams_aa_jyyq_01";
     public String audioFileName3 = "fams_aa_default";
+    
+    public String audioFileName5 = "fams_aa_dc_03";
+    
+    
 
        private MediaPlayer mediaPlayer;
 
@@ -241,6 +245,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void playAudio3(View view) {
         playRawAudio(audioFileName3);
+    }
+    
+    //
+    
+    public void playAudio5(View view) {
+        playRawAudio(audioFileName5);
     }
 
     // 播放 raw 下的音频（通用方法）
