@@ -30,7 +30,7 @@ import CyberWinPHP.Cyber_CPU.Cyber_Public_Var;
 
  
 import android.content.Context;
-import android.content.Intent;
+ 
  
 import android.media.MediaPlayer;
  
@@ -39,8 +39,7 @@ import android.view.View;
  
  
  
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+ 
 
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -57,6 +56,9 @@ import android.media.MediaRecorder;
 import java.io.FileInputStream;
 
 import java.io.InputStream;
+
+import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -398,7 +400,8 @@ public class MainActivity extends AppCompatActivity {
         // 初始化TTS
         mTts = new TextToSpeech(context, status -> {
             if (status == TextToSpeech.SUCCESS) {
-                mTts.setLanguage(Locale.CHINA);
+               // mTts.setLanguage(Locale.CHINA);
+                mTts.setLanguage(Locale.CHINESE); // 这里改成 CHINESE
                 mTts.setPitch(1.0f);
                 mTts.setSpeechRate(1.0f);
             }
@@ -427,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
         if (mTts == null || mCallAudioWriter == null) return;
         
          // 修复：TTS 输出到 AudioTrack（通话通道）
-        mTts.setAudioTrack(mCallAudioWriter);
+       // mTts.setAudioTrack(mCallAudioWriter);
     
         // 把TTS音频流定向输出到 通话AudioTrack
         mTts.speak(
