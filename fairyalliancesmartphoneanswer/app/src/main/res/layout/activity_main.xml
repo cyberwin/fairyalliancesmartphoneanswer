@@ -46,6 +46,19 @@
         android:layout_height="wrap_content"
         android:text="接听模式 2"
         android:onClick="playAudio2byphone"/>
+        
+           <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="播放应答 6语音"
+        android:onClick="play4xml6res"/>
+        
+        
+           <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="播放应答 7 tts"
+        android:onClick="play4xml7tts"/>
 
     <Button
         android:layout_width="match_parent"
