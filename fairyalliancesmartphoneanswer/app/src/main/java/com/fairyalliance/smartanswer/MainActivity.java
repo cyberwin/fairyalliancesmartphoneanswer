@@ -45,7 +45,14 @@ import androidx.core.content.ContextCompat;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
  
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import android.speech.tts.TextToSpeech;
+
  
+import android.media.AudioFormat;
+import android.media.AudioTrack;
+import android.media.MediaRecorder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,6 +88,14 @@ public class MainActivity extends AppCompatActivity {
     
 
        private MediaPlayer mediaPlayer;
+       
+       //2026-05-01
+       // 通话专用 音频写入器（虚拟MIC）
+    private AudioTrack mCallAudioWriter;
+    private TextToSpeech mTts;
+    
+    // 采样率固定 安卓10通话标准
+    private static final int CALL_SAMPLE_RATE = 16000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -339,5 +354,151 @@ public class MainActivity extends AppCompatActivity {
         }
         */
     }
+    
+    //2026-05-01
+    // 初始化：打通 通话MIC写入通道
+    public void initCallAudioWriterV20260501(Context context) {
+        // 先锁死安卓10通话音频模式
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        am.setMode(AudioManager.MODE_IN_COMMUNICATION);
+        am.setSpeakerphoneOn(true);
+    
+        // 构造通话专属属性
+        AudioAttributes attr = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                .build();
+    
+        AudioFormat format = new AudioFormat.Builder()
+                .setSampleRate(CALL_SAMPLE_RATE)
+                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                .build();
+    
+        int bufferSize = AudioTrack.getMinBufferSize(
+                CALL_SAMPLE_RATE,
+                AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT
+        );
+    
+        mCallAudioWriter = new AudioTrack(
+                attr,
+                format,
+                bufferSize * 2,
+                AudioTrack.MODE_STREAM,
+                AudioManager.AUDIO_SESSION_ID_GENERATE
+        );
+    
+        mCallAudioWriter.play();
+    
+        // 初始化TTS
+        mTts = new TextToSpeech(context, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                mTts.setLanguage(Locale.CHINA);
+                mTts.setPitch(1.0f);
+                mTts.setSpeechRate(1.0f);
+            }
+        });
+    }
+    
+    // 释放：关闭虚拟写入，恢复正常打电话
+    public void releaseCallAudioWriterV20260501() {
+        if (mCallAudioWriter != null) {
+            mCallAudioWriter.stop();
+            mCallAudioWriter.release();
+            mCallAudioWriter = null;
+        }
+        if (mTts != null) {
+            mTts.stop();
+            mTts.shutdown();
+            mTts = null;
+        }
+    }
+    
+    /**
+     * TTS文字 → 直接写入通话上行，对方听到，手机不外放
+     * @param content 要发送给对方的文字
+     */
+    public void ttsWriteToCallMic(String content) {
+        if (mTts == null || mCallAudioWriter == null) return;
+        
+         // 修复：TTS 输出到 AudioTrack（通话通道）
+        mTts.setAudioTrack(mCallAudioWriter);
+    
+        // 把TTS音频流定向输出到 通话AudioTrack
+        mTts.speak(
+                content,
+                TextToSpeech.QUEUE_ADD,
+                null,
+                null
+        );
+    }
+    
+    // 你原来的方法名、参数、结构 完全不动！只改内部
+    private void playRawAudiov20260501(String fileName) {
+        try {
+            // 先释放上一个（保持你原来的逻辑）
+            if (mCallAudioWriter != null) {
+                mCallAudioWriter.stop();
+                mCallAudioWriter.release();
+                mCallAudioWriter = null;
+            }
+    
+            // 获取音频ID（你原来的代码）
+            int resId = getResources().getIdentifier(fileName, "raw", getPackageName());
+            if (resId == 0) {
+                Toast.makeText(this, "播放失败：音频文件不存在", Toast.LENGTH_SHORT).show();
+                return;
+            }
+    
+            // 初始化通话写入通道（关键：让声音进电话）
+           // initCallAudioWriterV20260501(this);
+    
+            // 读取 RAW 音频并写入通话
+            InputStream inputStream = getResources().openRawResource(resId);
+            byte[] buffer = new byte[4096];
+            inputStream.skip(44); // 跳过WAV头
+    
+            new Thread(() -> {
+                try {
+                    int len;
+                    while ((len = inputStream.read(buffer)) != -1) {
+                        if (mCallAudioWriter != null) {
+                            mCallAudioWriter.write(buffer, 0, len);
+                        }
+                    }
+                    inputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+    
+            Toast.makeText(this, "正在播放：" + fileName, Toast.LENGTH_SHORT).show();
+    
+        } catch (Exception e) {
+            Toast.makeText(this, "播放失败：音频文件不存在", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+     public void play4xml6res(View view) {
+         // 1. 电话接通 OFFHOOK 第一件事
+        initCallAudioWriterV20260501(this);
+
+        playRawAudiov20260501(audioFileName5);
+        
+          // 4. 通话结束 / 挂断
+      // releaseCallAudioWriterV20260501();
+    }
+     public void play4xml7tts(View view) {
+          // 1. 电话接通 OFFHOOK 第一件事
+        initCallAudioWriterV20260501(this);
+        
+        // 2. 想用文字应答
+        ttsWriteToCallMic("您好，欢迎使用东方仙盟自动接机，自动应答");
+        
+        // 4. 通话结束 / 挂断
+       //releaseCallAudioWriterV20260501();
+    }
+    
     
 }
