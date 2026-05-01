@@ -54,6 +54,8 @@ import android.media.AudioFormat;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 
+import java.io.FileInputStream;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] PERMISSIONS_老的 = {
