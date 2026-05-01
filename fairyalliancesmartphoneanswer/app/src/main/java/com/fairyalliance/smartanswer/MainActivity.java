@@ -56,6 +56,8 @@ import android.media.MediaRecorder;
 
 import java.io.FileInputStream;
 
+import java.io.InputStream;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] PERMISSIONS_老的 = {
