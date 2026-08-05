@@ -48,9 +48,11 @@
 <!--通话状态修改兜底兼容权限-->
 <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
 
- 
- 
- 
+ <!--读取短信权限-->
+ <uses-permission android:name="android.permission.RECEIVE_SMS" />
+<uses-permission android:name="android.permission.READ_SMS" />
+ <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
  
 <!--本地局域网HTTP推送号码时间专属权限-->
 <uses-permission android:name="android.permission.INTERNET" />
