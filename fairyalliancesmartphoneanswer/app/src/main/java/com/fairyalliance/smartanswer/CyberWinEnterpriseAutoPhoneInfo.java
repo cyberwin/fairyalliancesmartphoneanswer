@@ -1,3 +1,4 @@
+package com.fairyalliance.smartanswer;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
