@@ -546,7 +546,13 @@ public class MainActivity extends AppCompatActivity {
     //2026-08-06
 public void getContactBytag(View view) {
     
-     
+        // 点击事件只做一件事：开启子线程，所有网络逻辑全部放进run()里面
+        //NetworkOnMainThreadException
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            //
+            
          try {
                 //规整本地标准时间
                  String contactJson = CyberWinEnterpriseAutoPhoneInfo.readAllContactGroupsToJson(this);
@@ -621,6 +627,10 @@ public void getContactBytag(View view) {
                    // }
                     writelog("本地推送","失败","异常详情："+errMsg);
             }
+       
+       //     
+        }).start(); //必须调用start()，启动后台子线程
+        
             
      
     }
