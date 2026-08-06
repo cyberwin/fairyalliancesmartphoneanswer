@@ -164,17 +164,17 @@ public class SmsMonitorForegroundService extends Service {
             cb = callback;
         }
         public void register(ContentResolver contentResolver){
-            cr = contentResolver;
-            cr.registerContentObserver(Telephony.Sms.CONTENT_URI,true,this);
+          //  cr = contentResolver;
+          //  cr.registerContentObserver(Telephony.Sms.CONTENT_URI,true,this);
         }
         public void unRegister(ContentResolver contentResolver){
             if(cr != null){
-                cr.unregisterContentObserver(this);
+               // cr.unregisterContentObserver(this);
             }
         }
-        @Override
+       // @Override
         public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
+           // super.onChange(selfChange);
             if(cr == null) return;
             Cursor cur = cr.query(Telephony.Sms.Inbox.CONTENT_URI,
                     new String[]{Telephony.Sms.ADDRESS,Telephony.Sms.BODY,Telephony.Sms.DATE},
