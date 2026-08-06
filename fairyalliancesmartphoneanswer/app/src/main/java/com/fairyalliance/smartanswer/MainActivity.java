@@ -59,6 +59,8 @@ import java.io.InputStream;
 
 import java.util.Locale;
 
+import com.fairyalliance.smartanswer.CyberWinEnterpriseAutoPhoneInfo;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -505,6 +507,48 @@ public class MainActivity extends AppCompatActivity {
         
         // 4. 通话结束 / 挂断
        //releaseCallAudioWriterV20260501();
+    }
+    
+    //2026-08-06
+public void getContactBytag(View view) {
+    
+     
+         try {
+                //规整本地标准时间
+                 String contactJson = CyberWinEnterpriseAutoPhoneInfo.readAllContactGroupsToJson(this);
+                 
+                 String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedContactlist";
+    
+                //原生GET请求携带来电号码+时间两个参数推送到本地服务
+                
+                  URL url = new URL(localHttpApi);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setConnectTimeout(3000);
+                    conn.setReadTimeout(3000);
+                    conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+            
+                    try(OutputStream os = conn.getOutputStream();
+                        OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8)){
+                        osw.write(contactJson);
+                        osw.flush();
+                    }
+            
+                    int code = conn.getResponseCode();
+                    writelog("本地推送","成功","JSON:"+contactJson+" 返回状态码"+code);
+                    conn.disconnect();
+                
+                
+            } catch (Exception e) {
+                writelog("本地推送","失败","推送本地服务异常："+e.getMessage());
+            }
+            
+     
+    }
+    
+    //getSmsRecoredAnalysis
+    public void getContactBytag(View view) {
     }
     
     
