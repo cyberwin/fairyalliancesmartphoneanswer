@@ -566,7 +566,7 @@ public void getContactBytag(View view) {
     }
     
     //getSmsRecoredAnalysis
-    public void getContactBytag(View view) {
+    public void getSmsRecoredAnalysis(View view) {
     }
     
     
