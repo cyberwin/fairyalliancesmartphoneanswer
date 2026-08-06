@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
-import android.provider.ContactsContract.RawContactsColumns;
+//import android.provider.ContactsContract.RawContactsColumns;
 
 public class CyberWinEnterpriseAutoPhoneInfo {
 
@@ -80,7 +80,8 @@ public class CyberWinEnterpriseAutoPhoneInfo {
                         new String[]{
                                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
                                 ContactsContract.CommonDataKinds.Phone.NUMBER,
-                                ContactsContract.RawContacts.CONTACT_LAST_UPDATED_TIMESTAMP
+                                 "contact_last_updated_timestamp"
+                               // ContactsContract.RawContacts.CONTACT_LAST_UPDATED_TIMESTAMP
                         },
                         sel, null, null
                 );
