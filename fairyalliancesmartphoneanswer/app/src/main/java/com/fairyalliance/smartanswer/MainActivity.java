@@ -62,6 +62,21 @@ import java.util.Locale;
 import com.fairyalliance.smartanswer.CyberWinEnterpriseAutoPhoneInfo;
 
 
+ 
+ 
+
+// 下面这4个是你必须补的
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.io.FileWriter;
+ 
+
+ 
+
+import java.net.URL;
+import java.net.HttpURLConnection;
+
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] PERMISSIONS_老的 = {
