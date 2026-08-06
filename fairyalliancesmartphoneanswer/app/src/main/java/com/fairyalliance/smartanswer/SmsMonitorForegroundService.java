@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import android.database.ContentObserver;
 
 public class SmsMonitorForegroundService extends Service {
     public static final String ACTION_SET_RULE_JSON = "ACTION_SET_RULE_JSON";
