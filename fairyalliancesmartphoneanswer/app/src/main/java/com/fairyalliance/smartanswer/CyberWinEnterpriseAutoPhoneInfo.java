@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
+import android.provider.ContactsContract.RawContactsColumns;
 
 public class CyberWinEnterpriseAutoPhoneInfo {
 
