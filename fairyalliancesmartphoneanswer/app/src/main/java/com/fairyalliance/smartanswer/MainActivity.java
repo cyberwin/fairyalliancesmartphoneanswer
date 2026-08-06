@@ -76,6 +76,9 @@ import java.io.FileWriter;
 import java.net.URL;
 import java.net.HttpURLConnection;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends AppCompatActivity {
 
