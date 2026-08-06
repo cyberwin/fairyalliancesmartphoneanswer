@@ -563,7 +563,8 @@ public void getContactBytag(View view) {
                 conn.setConnectTimeout(3000);
                 conn.setReadTimeout(3000);
                 conn.setDoOutput(true);
-                conn.setRequestProperty("Content‑Type", "application/json;charset=utf‑8");
+                //conn.setRequestProperty("Content‑Type", "application/json;charset=utf‑8");
+                conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
     
                 // 删掉StandardCharsets，用"UTF-8"字符串兼容所有Android版本
                 OutputStream os = conn.getOutputStream();
