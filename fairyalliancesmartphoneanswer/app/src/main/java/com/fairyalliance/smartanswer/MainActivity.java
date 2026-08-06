@@ -586,13 +586,24 @@ public void getContactBytag(View view) {
                // writelog("本地推送","失败","推送本地服务异常："+e.getMessage());
                 // getMessage为null时打印完整堆栈，定位真实错误
                     String errMsg = e.getMessage();
-                    if(errMsg == null){
-                        StringWriter sw = new StringWriter();
-                        e.printStackTrace(new PrintWriter(sw));
-                        errMsg = sw.toString();
-                    }
+                  //  if(errMsg == null){
+                    //    StringWriter sw = new StringWriter();
+                        //e.printStackTrace(new PrintWriter(sw));
+                   //     errMsg = sw.toString();
+                   // }
                     writelog("本地推送","失败","异常详情："+errMsg);
             }
+          catch (android.os.NetworkOnMainThreadException e) {
+            writelog("本地推送","失败","错误【NetworkOnMainThreadException】网络请求运行在UI主线程，必须放到子线程");
+        } catch (java.net.SocketTimeoutException e) {
+            writelog("本地推送","失败","错误【SocketTimeoutException】超时：连接/读取超时，服务器3秒无响应");
+        } catch (java.net.ConnectException e) {
+            writelog("本地推送","失败","错误【ConnectException】无法建立TCP连接：地址不可达、服务未启动、端口不通");
+        } catch (java.net.MalformedURLException e) {
+            writelog("本地推送","失败","错误【MalformedURLException】URL格式非法");
+        } catch (java.io.FileNotFoundException e) {
+            writelog("本地推送","失败","错误【FileNotFoundException】404资源不存在，getInputStream对4xx/5xx会抛该异常");
+        } 
             
      
     }
