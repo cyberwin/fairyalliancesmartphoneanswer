@@ -74,11 +74,27 @@ import java.io.FileWriter;
  
 
 import java.net.URL;
+
 import java.net.HttpURLConnection;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+
+import java.io.BufferedReader;
+
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.ConnectException;
+
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
+ 
+ 
 
 public class MainActivity extends AppCompatActivity {
 
