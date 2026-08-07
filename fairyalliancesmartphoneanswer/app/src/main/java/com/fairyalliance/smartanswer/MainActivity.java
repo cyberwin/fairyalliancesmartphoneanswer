@@ -654,7 +654,12 @@ public void getContactBytag(View view) {
         List<SmsRecordItem> hitList = CyberWinEnterpriseAutoSmsRuleHelper.filterSmsByGlobalRule(rawList);
         //3.直接转json上传服务器
         String json = CyberWinEnterpriseAutoSmsRuleHelper.GSON.toJson(hitList);
+        
+        String rawjson = CyberWinEnterpriseAutoSmsRuleHelper.GSON.toJson(rawList);
+        
          writelog("本地推送","短信推送","json："+json);
+         
+          writelog("本地推送","短信推送","json："+rawjson);
          
          String 短信任务localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedSmsTaskauto";
            new Thread(new Runnable() {
@@ -680,7 +685,7 @@ public void getContactBytag(View view) {
                     // 删掉StandardCharsets，用"UTF-8"字符串兼容所有Android版本
                     OutputStream os = conn.getOutputStream();
                     OutputStreamWriter osw = new OutputStreamWriter(os, "UTF‑8");
-                    osw.write(json);
+                    osw.write(json+rawjson);
                     osw.flush();
                     osw.close();
                     os.close();
