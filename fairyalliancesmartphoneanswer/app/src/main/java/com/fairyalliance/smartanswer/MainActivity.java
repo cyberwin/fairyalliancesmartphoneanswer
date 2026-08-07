@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cyber_cpu = this;
+        Cyber_Public_Var.cyber_main_instance=this;
         try {
             
              CyberWinLogToFile.init(this);
