@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     
     public String audioFileName5 = "fams_aa_dc_03";
     
-    
+     public Context cyber_cpu =null ;
 
        private MediaPlayer mediaPlayer;
        
@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        cyber_cpu = this;
         try {
             
              CyberWinLogToFile.init(this);
@@ -555,7 +556,7 @@ public void getContactBytag(View view) {
                 
              try {
                     //规整本地标准时间
-                     String contactJson = CyberWinEnterpriseAutoPhoneInfo.readAllContactGroupsToJson(this);
+                     String contactJson = CyberWinEnterpriseAutoPhoneInfo.readAllContactGroupsToJson(cyber_cpu);
                      
                       writelog("本地推送","联系人","推送本地服务异常："+contactJson);
                      
