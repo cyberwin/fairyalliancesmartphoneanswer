@@ -300,7 +300,7 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
    // private static void writelog(String tag1, String tag2, String msg){
   //      Log.d("writelog", tag1+"|"+tag2+"|"+msg);
     //}
-       private void writelog(String type, String name, String msg) {
+       private static void writelog(String type, String name, String msg) {
             try {
                
                
