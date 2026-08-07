@@ -658,9 +658,9 @@ public void getContactBytag(View view) {
         
         String rawjson = CyberWinEnterpriseAutoSmsRuleHelper.GSON.toJson(rawList);
         
-         writelog("本地推送","短信推送","json："+json);
+         writelog("本地推送","短信推送","jsonhitList："+json);
          
-          writelog("本地推送","短信推送","json："+rawjson);
+          writelog("本地推送","短信推送","jsonreadSms："+rawjson);
          
          String 短信任务localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedSmsTaskauto";
            new Thread(new Runnable() {
