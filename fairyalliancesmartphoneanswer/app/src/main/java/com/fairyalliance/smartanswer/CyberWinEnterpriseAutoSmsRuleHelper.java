@@ -24,6 +24,9 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 
+import CyberWinPHP.Cyber_CPU.Cyber_Public_Var;
+
+
 // ===================== 规则实体【修正，增加level】=====================
 class SmsRuleItem {
     public String data_id; //规则id
@@ -303,7 +306,7 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
        private static void writelog(String type, String name, String msg) {
             try {
                
-               
+                CyberWinLogToFile.init( Cyber_Public_Var.cyber_main_instance);
                 // 1. 时间格式化：yyyy-MM-dd HH:mm:ss
               //  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
               //  String time = sdf.format(new Date());
