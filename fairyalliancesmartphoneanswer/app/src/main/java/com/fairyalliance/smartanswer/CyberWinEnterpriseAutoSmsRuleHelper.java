@@ -48,7 +48,7 @@ class SmsRecordItem {
  */
 public final class CyberWinEnterpriseAutoSmsRuleHelper {
     private static final String TAG = "cwSmsRuleHelper";
-    private static final Gson GSON = new Gson();
+    public static final Gson GSON = new Gson();
 
     // ========== 全局静态变量：内存中保存服务器下发全部规则 ==========
     public static List<SmsRuleItem> GLOBAL_SMS_RULES = new ArrayList<>();
