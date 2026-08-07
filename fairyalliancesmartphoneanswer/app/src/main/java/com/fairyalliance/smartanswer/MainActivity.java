@@ -550,85 +550,87 @@ public void getContactBytag(View view) {
         //NetworkOnMainThreadException
     new Thread(new Runnable() {
         @Override
-        public void run() {
-            //
-            
-         try {
-                //规整本地标准时间
-                 String contactJson = CyberWinEnterpriseAutoPhoneInfo.readAllContactGroupsToJson(this);
-                 
-                  writelog("本地推送","联系人","推送本地服务异常："+contactJson);
-                 
-                 String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedContactlist";
-    
-                //原生GET请求携带来电号码+时间两个参数推送到本地服务
+            public void run() {
+                //
                 
-                 URL url = new URL(localHttpApi);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setConnectTimeout(3000);
-                conn.setReadTimeout(3000);
-                conn.setDoOutput(true);
-                //conn.setRequestProperty("Content‑Type", "application/json;charset=utf‑8");
-                conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-    
-                // 删掉StandardCharsets，用"UTF-8"字符串兼容所有Android版本
-                OutputStream os = conn.getOutputStream();
-                OutputStreamWriter osw = new OutputStreamWriter(os, "UTF‑8");
-                osw.write(contactJson);
-                osw.flush();
-                osw.close();
-                os.close();
-    
-                int code = conn.getResponseCode();
-                String responseText = "";
-                //读取返回内容，区分成功流/错误流
-                InputStream is;
-                if(code >=200 && code <300){
-                    is = conn.getInputStream();
-                }else{
-                    is = conn.getErrorStream();
-                }
-                if(is != null){
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF‑8"));
-                    String line;
-                    StringBuilder sb = new StringBuilder();
-                    while((line=br.readLine())!=null){
-                        sb.append(line);
+             try {
+                    //规整本地标准时间
+                     String contactJson = CyberWinEnterpriseAutoPhoneInfo.readAllContactGroupsToJson(this);
+                     
+                      writelog("本地推送","联系人","推送本地服务异常："+contactJson);
+                     
+                     String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedContactlist";
+        
+                    //原生GET请求携带来电号码+时间两个参数推送到本地服务
+                    
+                     URL url = new URL(localHttpApi);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setConnectTimeout(3000);
+                    conn.setReadTimeout(3000);
+                    conn.setDoOutput(true);
+                    //conn.setRequestProperty("Content‑Type", "application/json;charset=utf‑8");
+                    conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+        
+                    // 删掉StandardCharsets，用"UTF-8"字符串兼容所有Android版本
+                    OutputStream os = conn.getOutputStream();
+                    OutputStreamWriter osw = new OutputStreamWriter(os, "UTF‑8");
+                    osw.write(contactJson);
+                    osw.flush();
+                    osw.close();
+                    os.close();
+        
+                    int code = conn.getResponseCode();
+                    String responseText = "";
+                    //读取返回内容，区分成功流/错误流
+                    InputStream is;
+                    if(code >=200 && code <300){
+                        is = conn.getInputStream();
+                    }else{
+                        is = conn.getErrorStream();
                     }
-                    br.close();
-                    is.close();
-                    responseText = sb.toString();
+                    if(is != null){
+                        BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF‑8"));
+                        String line;
+                        StringBuilder sb = new StringBuilder();
+                        while((line=br.readLine())!=null){
+                            sb.append(line);
+                        }
+                        br.close();
+                        is.close();
+                        responseText = sb.toString();
+                    }
+        
+                    writelog("本地推送","成功","HTTP状态码:"+code+" 服务返回："+responseText);
+                    conn.disconnect();
+                    
+                    
+                } 
+              catch (android.os.NetworkOnMainThreadException e) {
+                writelog("本地推送","失败","错误【NetworkOnMainThreadException】网络请求运行在UI主线程，必须放到子线程");
+            } catch (java.net.SocketTimeoutException e) {
+                writelog("本地推送","失败","错误【SocketTimeoutException】超时：连接/读取超时，服务器3秒无响应");
+            } catch (java.net.ConnectException e) {
+                writelog("本地推送","失败","错误【ConnectException】无法建立TCP连接：地址不可达、服务未启动、端口不通");
+            } catch (java.net.MalformedURLException e) {
+                writelog("本地推送","失败","错误【MalformedURLException】URL格式非法");
+            } catch (java.io.FileNotFoundException e) {
+                writelog("本地推送","失败","错误【FileNotFoundException】404资源不存在，getInputStream对4xx/5xx会抛该异常");
+            } catch (Exception e) {
+                   // writelog("本地推送","失败","推送本地服务异常："+e.getMessage());
+                    // getMessage为null时打印完整堆栈，定位真实错误
+                        String errMsg = e.getMessage();
+                      //  if(errMsg == null){
+                        //    StringWriter sw = new StringWriter();
+                            //e.printStackTrace(new PrintWriter(sw));
+                       //     errMsg = sw.toString();
+                       // }
+                        writelog("本地推送","失败","异常详情："+errMsg);
                 }
-    
-                writelog("本地推送","成功","HTTP状态码:"+code+" 服务返回："+responseText);
-                conn.disconnect();
+           
+            
                 
-                
-            } 
-          catch (android.os.NetworkOnMainThreadException e) {
-            writelog("本地推送","失败","错误【NetworkOnMainThreadException】网络请求运行在UI主线程，必须放到子线程");
-        } catch (java.net.SocketTimeoutException e) {
-            writelog("本地推送","失败","错误【SocketTimeoutException】超时：连接/读取超时，服务器3秒无响应");
-        } catch (java.net.ConnectException e) {
-            writelog("本地推送","失败","错误【ConnectException】无法建立TCP连接：地址不可达、服务未启动、端口不通");
-        } catch (java.net.MalformedURLException e) {
-            writelog("本地推送","失败","错误【MalformedURLException】URL格式非法");
-        } catch (java.io.FileNotFoundException e) {
-            writelog("本地推送","失败","错误【FileNotFoundException】404资源不存在，getInputStream对4xx/5xx会抛该异常");
-        } catch (Exception e) {
-               // writelog("本地推送","失败","推送本地服务异常："+e.getMessage());
-                // getMessage为null时打印完整堆栈，定位真实错误
-                    String errMsg = e.getMessage();
-                  //  if(errMsg == null){
-                    //    StringWriter sw = new StringWriter();
-                        //e.printStackTrace(new PrintWriter(sw));
-                   //     errMsg = sw.toString();
-                   // }
-                    writelog("本地推送","失败","异常详情："+errMsg);
-            }
-       
-       //     
+            }//     
         }).start(); //必须调用start()，启动后台子线程
         
             
