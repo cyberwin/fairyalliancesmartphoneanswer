@@ -60,7 +60,7 @@ import java.io.InputStream;
 import java.util.Locale;
 
 import com.fairyalliance.smartanswer.CyberWinEnterpriseAutoPhoneInfo;
-
+import com.fairyalliance.smartanswer.CyberWinEnterpriseAutoSmsRuleHelper;
 
  
  
@@ -639,7 +639,105 @@ public void getContactBytag(View view) {
     }
     
     //getSmsRecoredAnalysis
+    public void synctaskrules(View view) {
+            //1.读取原始短信
+         String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=gainsmsrules";
+        
+         CyberWinEnterpriseAutoSmsRuleHelper.loadRuleFromServer(localHttpApi);
+    }
     public void getSmsRecoredAnalysis(View view) {
+        
+        List<SmsRecordItem> rawList = CyberWinEnterpriseAutoSmsRuleHelper.readSmsList(this, 300, null, null);
+        //2.执行规则过滤，输出已经填充rule_id、level的命中集合
+        List<SmsRecordItem> hitList = CyberWinEnterpriseAutoSmsRuleHelper.filterSmsByGlobalRule(rawList);
+        //3.直接转json上传服务器
+        String json = CyberWinEnterpriseAutoSmsRuleHelper.GSON.toJson(hitList);
+         writelog("本地推送","短信推送","json："+json);
+         
+         String 短信任务localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedSmsTaskauto";
+           new Thread(new Runnable() {
+        @Override
+            public void run() {
+                //
+                
+             try {
+                    //规整本地标准时间
+                      
+                   
+                    //原生GET请求携带来电号码+时间两个参数推送到本地服务
+                    
+                     URL url = new URL(短信任务localHttpApi);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setConnectTimeout(3000);
+                    conn.setReadTimeout(3000);
+                    conn.setDoOutput(true);
+                    //conn.setRequestProperty("Content‑Type", "application/json;charset=utf‑8");
+                    conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+        
+                    // 删掉StandardCharsets，用"UTF-8"字符串兼容所有Android版本
+                    OutputStream os = conn.getOutputStream();
+                    OutputStreamWriter osw = new OutputStreamWriter(os, "UTF‑8");
+                    osw.write(json);
+                    osw.flush();
+                    osw.close();
+                    os.close();
+        
+                    int code = conn.getResponseCode();
+                    String responseText = "";
+                    //读取返回内容，区分成功流/错误流
+                    InputStream is;
+                    if(code >=200 && code <300){
+                        is = conn.getInputStream();
+                    }else{
+                        is = conn.getErrorStream();
+                    }
+                    if(is != null){
+                        BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF‑8"));
+                        String line;
+                        StringBuilder sb = new StringBuilder();
+                        while((line=br.readLine())!=null){
+                            sb.append(line);
+                        }
+                        br.close();
+                        is.close();
+                        responseText = sb.toString();
+                    }
+        
+                    writelog("本地推送","短信推送","HTTP状态码:"+code+" 服务返回："+responseText);
+                    conn.disconnect();
+                    
+                    
+                } 
+              catch (android.os.NetworkOnMainThreadException e) {
+                writelog("本地推送","短信推送失败","错误【NetworkOnMainThreadException】网络请求运行在UI主线程，必须放到子线程");
+            } catch (java.net.SocketTimeoutException e) {
+                writelog("本地推送","短信推送失败","错误【SocketTimeoutException】超时：连接/读取超时，服务器3秒无响应");
+            } catch (java.net.ConnectException e) {
+                writelog("本地推送","短信推送失败","错误【ConnectException】无法建立TCP连接：地址不可达、服务未启动、端口不通");
+            } catch (java.net.MalformedURLException e) {
+                writelog("本地推送","短信推送失败","错误【MalformedURLException】URL格式非法");
+            } catch (java.io.FileNotFoundException e) {
+                writelog("本地推送","短信推送失败","错误【FileNotFoundException】404资源不存在，getInputStream对4xx/5xx会抛该异常");
+            } catch (Exception e) {
+                   // writelog("本地推送","失败","推送本地服务异常："+e.getMessage());
+                    // getMessage为null时打印完整堆栈，定位真实错误
+                        String errMsg = e.getMessage();
+                      //  if(errMsg == null){
+                        //    StringWriter sw = new StringWriter();
+                            //e.printStackTrace(new PrintWriter(sw));
+                       //     errMsg = sw.toString();
+                       // }
+                        writelog("本地推送","短信推送失败","异常详情："+errMsg);
+                }
+           
+            
+                
+            }//     
+        }).start(); //必须调用start()，启动后台子线程
+        
+     
+   
     }
     
     
