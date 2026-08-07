@@ -75,7 +75,7 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(3000);
                 int code = conn.getResponseCode();
-              //  writelog("本地推送","下载规则","时间"+nowTime+"返回状态码"+code);
+                writelog("本地推送","下载规则","时间"+nowTime+"返回状态码"+code);
 
                 String responseBody = "";
                 InputStream is = null;
@@ -94,14 +94,14 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                     }
                     responseBody = sb.toString();
                     br.close();
-                    //writelog("本地推送","下载规则","时间"+nowTime+"返回数据："+responseBody);
+                    writelog("本地推送","下载规则","时间"+nowTime+"返回数据："+responseBody);
                     loadRuleFromServerJson(responseBody);
 
                 } finally {
                     conn.disconnect();
                 }
             } catch (Exception e) {
-               // writelog("本地推送","失败","推送本地服务异常："+e.getMessage());
+                writelog("本地推送","失败下载规则","推送本地服务异常："+e.getMessage());
             }
         }).start();
     }
@@ -114,6 +114,7 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
     public static boolean loadRuleFromServerJson(String jsonStr) {
         if (jsonStr == null || jsonStr.trim().isEmpty()) {
             Log.e(TAG, "loadRuleFromServerJson: json为空");
+            writelog("本地推送","loadRule","数据json为空："+jsonStr);
             return false;
         }
         try {
@@ -125,10 +126,12 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
             // 赋值给全局静态变量
             GLOBAL_SMS_RULES.clear();
             GLOBAL_SMS_RULES.addAll(tempList);
-            Log.i(TAG, "加载规则完成，共 " + GLOBAL_SMS_RULES.size() + " 条规则");
+             writelog("本地推送","loadRule","共 " + GLOBAL_SMS_RULES.size() + " 条规则");
+          //  Log.i(TAG, "加载规则完成，共 " + GLOBAL_SMS_RULES.size() + " 条规则");
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "解析规则JSON异常", e);
+           // Log.e(TAG, "解析规则JSON异常", e);
+              writelog("本地推送","loadRule","解析规则JSON异常 " + e.getMessage() + " ");
             return false;
         }
     }
@@ -207,7 +210,8 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                 result.add(item);
             }
         } catch (Exception e) {
-            Log.e(TAG,"读取短信数据库异常",e);
+           // Log.e(TAG,"读取短信数据库异常",e);
+             writelog("本地推送","readSmsList","读取短信数据库异常 " + e.getMessage() + " ");
         } finally {
             if(cursor != null){
                 cursor.close();
@@ -285,7 +289,8 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                     return true;
                 }
             }catch (Exception e){
-                Log.w(TAG,"正则表达式错误："+reg,e);
+               // Log.w(TAG,"正则表达式错误："+reg,e);
+                 writelog("本地推送","matchAnyRegex","正则表达式错误 " +reg + " ");
             }
         }
         return false;
@@ -295,5 +300,24 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
    // private static void writelog(String tag1, String tag2, String msg){
   //      Log.d("writelog", tag1+"|"+tag2+"|"+msg);
     //}
+       private void writelog(String type, String name, String msg) {
+            try {
+               
+               
+                // 1. 时间格式化：yyyy-MM-dd HH:mm:ss
+              //  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+              //  String time = sdf.format(new Date());
+        
+                // 2. 日志内容
+              //  String logContent = time + " | " + type + " | " + name + " | " + msg + "\n";
+                 String logContent = type + " | " + name + " | " + msg + "\n";
+                 CyberWinLogToFile.d_windows(type,name,logContent);
+              
+        
+        
+            } catch (Exception e) {
+                // 不处理，避免崩溃
+            }
+        }
 
 }
