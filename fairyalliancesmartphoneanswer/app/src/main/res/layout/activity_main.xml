@@ -84,21 +84,21 @@
         android:gravity="center">
         
             <Button
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="获取tag通讯录"
+        android:text="获tag通讯录"
         android:onClick="getContactBytag"/>
         
          <Button
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="获取关键短信"
+        android:text="获关键短信"
         android:onClick="getSmsRecoredAnalysis"/>
         
          <Button
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="获取all短信"
+        android:text="获all短信"
         android:onClick="getSmsRecoredAnalysisAll"/>
         
          </LinearLayout>
