@@ -237,9 +237,11 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
             // writelog("本地推送","过滤","短信为空 ");
              return out;
         }
-        writelog("本地推送","过滤","短信有数据 ");
+       // writelog("本地推送","过滤","短信有数据 ");
         for(SmsRecordItem rawSms : rawSmsList){
             //writelog("本地推送","过滤","号码: "+rawSms.smsAddress);
+            
+             int ruleCount = 0;     //匹配成功的正则数量
             
             for(SmsRuleItem rule : GLOBAL_SMS_RULES){
                // writelog("本地推送","s规则","number: "+.GSON.toJson(rule.numberRegexList));
@@ -247,6 +249,15 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                 //规则校验：两个列表同时为空，直接跳过该规则
                 boolean numListEmpty = (rule.numberRegexList == null || rule.numberRegexList.isEmpty());
                 boolean bodyListEmpty = (rule.bodyRegexList == null || rule.bodyRegexList.isEmpty());
+                
+                ruleCount = ruleCount +1;
+                
+                writelog("本地推送","s2规则","判断："+bodyListEmpty+",原始: "+GSON.toJson(rule.bodyRegexList)+"numListEmpty="+numListEmpty+","+GSON.toJson(rule.numberRegexList));
+                String res判断="规则："+ruleCount+"条 ";
+                if(numListEmpty && bodyListEmpty){
+                    res判断 = res判断+ "同时为空";
+                }
+                
                 if(numListEmpty && bodyListEmpty){
                   //  writelog("本地推送","s规则","无规则 ");
                     continue;
@@ -275,13 +286,18 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                 
                 //2026-08-08 同时满足
                 if(!bodyListEmpty && !numListEmpty){
+                     res判断 = res判断+ "同时非空ruleHit="+ruleHit;
                     //非空 要求全部满足
+                    
                     if(matchNumber  && matchBody){
                          ruleHit = true;
                     }else{
                          ruleHit = false;
                     }
+                    
+                      res判断 = res判断+ "，同时非空，后：ruleHit="+ruleHit;
                 }
+                  writelog("本地推送","s2规则",res判断);
                 
 
                 if(ruleHit){
