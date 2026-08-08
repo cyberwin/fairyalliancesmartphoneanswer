@@ -233,25 +233,35 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
      */
     public static List<SmsRecordItem> filterSmsByGlobalRule(List<SmsRecordItem> rawSmsList){
         List<SmsRecordItem> out = new ArrayList<>();
-        if(rawSmsList == null || rawSmsList.isEmpty()) return out;
-
+        if(rawSmsList == null || rawSmsList.isEmpty()){
+            // writelog("本地推送","过滤","短信为空 ");
+             return out;
+        }
+        writelog("本地推送","过滤","短信有数据 ");
         for(SmsRecordItem rawSms : rawSmsList){
+            //writelog("本地推送","过滤","号码: "+rawSms.smsAddress);
+            
             for(SmsRuleItem rule : GLOBAL_SMS_RULES){
+               // writelog("本地推送","s规则","number: "+.GSON.toJson(rule.numberRegexList));
+               // writelog("本地推送","s规则","body: "+GSON.toJson(rawSms.bodyRegexList));
                 //规则校验：两个列表同时为空，直接跳过该规则
                 boolean numListEmpty = (rule.numberRegexList == null || rule.numberRegexList.isEmpty());
                 boolean bodyListEmpty = (rule.bodyRegexList == null || rule.bodyRegexList.isEmpty());
                 if(numListEmpty && bodyListEmpty){
+                  //  writelog("本地推送","s规则","无规则 ");
                     continue;
                 }
 
                 boolean matchNumber = false;
                 if(!numListEmpty){
-                    matchNumber = matchAnyRegex(rawSms.smsAddress, rule.numberRegexList);
+                   // matchNumber = matchAnyRegexOne(rawSms.smsAddress, rule.numberRegexList);
+                    matchNumber = matchAnyRegexALL(rawSms.smsAddress, rule.numberRegexList);
+                    //matchAnyRegexALL
                 }
 
                 boolean matchBody = false;
                 if(!bodyListEmpty){
-                    matchBody = matchAnyRegex(rawSms.smsBody, rule.bodyRegexList);
+                    matchBody = matchAnyRegexALL(rawSms.smsBody, rule.bodyRegexList);
                 }
 
                 //核心逻辑：(号码非空且命中) OR (正文非空且命中)
@@ -282,22 +292,71 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
     /**
      * 工具：判断文本是否匹配列表中**任意一条正则**
      */
-    private static boolean matchAnyRegex(String text, List<String> regexList){
+    private static boolean matchAnyRegexOne(String text, List<String> regexList){
         if(text == null || regexList == null || regexList.isEmpty()){
             return false;
         }
         for(String reg : regexList){
             try{
-                if(Pattern.compile(reg).matcher(text).find()){
+                // 仅当首尾都是斜杠，才剥离PHP定界符；干净正则原样使用
+                  String realReg = reg;
+                    if (realReg.startsWith("/") && realReg.endsWith("/")) {
+                        realReg = realReg.substring(1, realReg.length() - 1);
+                    }
+            
+                if(Pattern.compile(realReg).matcher(text).find()){
                     return true;
                 }
             }catch (Exception e){
                // Log.w(TAG,"正则表达式错误："+reg,e);
-                 writelog("本地推送","matchAnyRegex","正则表达式错误 " +reg + " ");
+                 writelog("本地推送","matchAnyRegexOne","正则表达式错误 " +realReg + " ");
             }
         }
         return false;
     }
+    
+    /**
+ * 且逻辑：所有【非空】正则项全部匹配成功才返回true
+ * 空字符串直接跳过，不计入有效数量；正则异常直接返回false
+ */
+private static boolean matchAnyRegexALL(String text, List<String> regexList){
+    if(text == null || regexList == null || regexList.isEmpty()){
+        return false;
+    }
+
+    int validCount = 0;    //有效、非空的正则数量
+    int hitCount = 0;     //匹配成功的正则数量
+
+    for(String reg : regexList){
+        //过滤空字符串，直接跳过，不参与运算
+        if(reg == null || reg.trim().length() == 0){
+            continue;
+        }
+        validCount ++;
+
+        try{
+            String realReg = reg;
+            //兼容PHP旧的首尾定界符/
+            if (realReg.startsWith("/") && realReg.endsWith("/")) {
+                realReg = realReg.substring(1, realReg.length() - 1);
+            }
+            boolean hit = Pattern.compile(realReg).matcher(text).find();
+            if(hit){
+                hitCount++;
+            }else{
+                //任意一条有效正则匹配失败，直接整体失败
+                return false;
+            }
+        }catch (Exception e){
+            writelog("本地推送","matchAnyRegexALL","正则表达式错误 " + reg + " ");
+            //正则编译异常，直接判定不通过
+            return false;
+        }
+    }
+
+    //必须：存在有效正则，并且成功数等于全部有效正则
+    return validCount > 0 && hitCount == validCount;
+}
 
     //=================== 日志占位，你原有writelog保留 ===================
    // private static void writelog(String tag1, String tag2, String msg){
