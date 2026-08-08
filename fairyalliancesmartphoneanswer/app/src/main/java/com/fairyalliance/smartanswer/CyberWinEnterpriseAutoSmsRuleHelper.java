@@ -26,14 +26,21 @@ import java.util.Locale;
 
 import CyberWinPHP.Cyber_CPU.Cyber_Public_Var;
 
+ 
+
+import java.util.regex.Matcher;
+
+
 
 // ===================== 规则实体【修正，增加level】=====================
 class SmsRuleItem {
     public String data_id; //规则id
-    public List<String> numberRegexList;
-    public List<String> bodyRegexList;
+    public List<String> numberregexlist;
+    public List<String> bodyregexlist;
     /** 预警紧急等级 */
     public int level;
+    //2026-06-08-08
+    public List<String> extractreglist;
 }
 
 // ===================== 短信输出记录实体 =====================
@@ -43,6 +50,7 @@ class SmsRecordItem {
     public long smsDateTs;
     public int level; /** 预警紧急等级 */
     public String rule_id; //规则id
+    public String keywords; //复合关键字
 }
 
 /**
@@ -245,14 +253,14 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
             
             for(SmsRuleItem rule : GLOBAL_SMS_RULES){
                // writelog("本地推送","s规则","number: "+.GSON.toJson(rule.numberRegexList));
-               // writelog("本地推送","s规则","body: "+GSON.toJson(rawSms.bodyRegexList));
+               // writelog("本地推送","s规则","body: "+GSON.toJson(rawSms.bodyregexlist));
                 //规则校验：两个列表同时为空，直接跳过该规则
-                boolean numListEmpty = (rule.numberRegexList == null || rule.numberRegexList.isEmpty());
-                boolean bodyListEmpty = (rule.bodyRegexList == null || rule.bodyRegexList.isEmpty());
+                boolean numListEmpty = (rule.numberregexlist == null || rule.numberregexlist.isEmpty());
+                boolean bodyListEmpty = (rule.bodyregexlist == null || rule.bodyregexlist.isEmpty());
                 
                 ruleCount = ruleCount +1;
                 
-                writelog("本地推送","s2规则","判断："+bodyListEmpty+",原始: "+GSON.toJson(rule.bodyRegexList)+"numListEmpty="+numListEmpty+","+GSON.toJson(rule.numberRegexList));
+               // writelog("本地推送","s2规则","判断："+bodyListEmpty+",原始: "+GSON.toJson(rule.bodyregexlist)+"numListEmpty="+numListEmpty+","+GSON.toJson(rule.numberRegexList));
                 String res判断="规则："+ruleCount+"条 ";
                 if(numListEmpty && bodyListEmpty){
                     res判断 = res判断+ "同时为空";
@@ -266,13 +274,13 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                 boolean matchNumber = false;
                 if(!numListEmpty){
                    // matchNumber = matchAnyRegexOne(rawSms.smsAddress, rule.numberRegexList);
-                    matchNumber = matchAnyRegexALL(rawSms.smsAddress, rule.numberRegexList);
+                    matchNumber = matchAnyRegexALL(rawSms.smsAddress, rule.numberregexlist);
                     //matchAnyRegexALL
                 }
 
                 boolean matchBody = false;
                 if(!bodyListEmpty){
-                    matchBody = matchAnyRegexALL(rawSms.smsBody, rule.bodyRegexList);
+                    matchBody = matchAnyRegexALL(rawSms.smsBody, rule.bodyregexlist);
                 }
 
                 //核心逻辑：(号码非空且命中) OR (正文非空且命中)
@@ -297,8 +305,13 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                     
                       res判断 = res判断+ "，同时非空，后：ruleHit="+ruleHit;
                 }
-                  writelog("本地推送","s2规则",res判断);
-                
+               //   writelog("本地推送","s2规则",res判断);
+               
+              
+               String extractedRaw = "";
+                if(ruleHit){
+                    extractedRaw = fetchAllExtractContent(rawSms.smsBody, rule.extractreglist);
+                }
 
                 if(ruleHit){
                     //复制一份对象，回填规则id与等级，不要修改原始对象
@@ -308,6 +321,8 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                     hitItem.smsDateTs = rawSms.smsDateTs;
                     hitItem.rule_id = rule.data_id;
                     hitItem.level = rule.level;
+                    hitItem.keywords = extractedRaw;
+                    
                     out.add(hitItem);
                     //❗不break，允许一条短信命中多条不同规则
                 }
@@ -384,6 +399,61 @@ private static boolean matchAnyRegexALL(String text, List<String> regexList){
     //必须：存在有效正则，并且成功数等于全部有效正则
     return validCount > 0 && hitCount == validCount;
 }
+
+//2026-08-08
+    
+    /**
+     * @param content 短信正文
+     * @param subRegexList getKeywords 服务器下发的子提取正则数组，可以有空字符串
+     * @return 拼接后的字符串，多个结果 |||分隔；无结果返回 ""
+     */
+    public static String fetchAllExtractContent(String content, List<String> subRegexList) {
+        //存放所有捕获到的关键片段
+        List<String> captureItems = new ArrayList<>();
+    
+        if (subRegexList == null || subRegexList.size() == 0) {
+            return "";
+        }
+    
+        for (String oneRegex : subRegexList) {
+            //规则为空，直接跳过这条表达式，不做匹配
+            if (oneRegex == null || oneRegex.trim().length() == 0) {
+                continue;
+            }
+            Pattern pattern;
+            try {
+                pattern = Pattern.compile(oneRegex);
+            } catch (Exception e) {
+                //正则表达式语法错误，直接跳过，防止APP崩溃
+                continue;
+            }
+            Matcher matcher = pattern.matcher(content);
+            // while循环：把当前这一条正则所有匹配项全部捞出来（支持同短信2个取件码场景）
+            while (matcher.find()) {
+                //必须要有第1捕获组
+                if (matcher.groupCount() >= 1) {
+                    String val = matcher.group(1);
+                    if (val != null && val.trim().length() > 0) {
+                        captureItems.add(val.trim());
+                    }
+                }
+            }
+        }
+    
+        //把list拼接成单字符串 |||分隔
+        if (captureItems.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < captureItems.size(); i++) {
+            if (i > 0) {
+                //sb.append("|||");
+                sb.append("|");
+            }
+            sb.append(captureItems.get(i));
+        }
+        return sb.toString();
+    }
 
     //=================== 日志占位，你原有writelog保留 ===================
    // private static void writelog(String tag1, String tag2, String msg){
