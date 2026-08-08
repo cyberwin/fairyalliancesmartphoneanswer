@@ -84,19 +84,19 @@
         android:gravity="center">
         
             <Button
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="获tag通讯录"
         android:onClick="getContactBytag"/>
         
          <Button
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="获关键短信"
         android:onClick="getSmsRecoredAnalysis"/>
         
          <Button
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="获all短信"
         android:onClick="getSmsRecoredAnalysisAll"/>
