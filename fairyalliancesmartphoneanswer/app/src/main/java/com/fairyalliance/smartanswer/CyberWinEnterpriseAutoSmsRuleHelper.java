@@ -309,7 +309,7 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                 }
             }catch (Exception e){
                // Log.w(TAG,"正则表达式错误："+reg,e);
-                 writelog("本地推送","matchAnyRegexOne","正则表达式错误 " +realReg + " ");
+                 writelog("本地推送","matchAnyRegexOne","正则表达式错误 " +reg + " ");
             }
         }
         return false;
