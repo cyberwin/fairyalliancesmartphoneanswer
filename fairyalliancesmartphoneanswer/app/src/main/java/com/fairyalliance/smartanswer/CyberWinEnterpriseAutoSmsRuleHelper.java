@@ -274,7 +274,7 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                 }
                 
                 //2026-08-08 同时满足
-                if(bodyListEmpty && numListEmpty){
+                if(!bodyListEmpty && !numListEmpty){
                     //非空 要求全部满足
                     if(matchNumber  && matchBody){
                          ruleHit = true;
