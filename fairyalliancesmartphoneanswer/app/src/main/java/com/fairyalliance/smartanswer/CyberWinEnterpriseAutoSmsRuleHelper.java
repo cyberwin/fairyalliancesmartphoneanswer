@@ -272,6 +272,17 @@ public final class CyberWinEnterpriseAutoSmsRuleHelper {
                 if(!bodyListEmpty && matchBody){
                     ruleHit = true;
                 }
+                
+                //2026-08-08 同时满足
+                if(bodyListEmpty && numListEmpty){
+                    //非空 要求全部满足
+                    if(matchNumber  && matchBody){
+                         ruleHit = true;
+                    }else{
+                         ruleHit = false;
+                    }
+                }
+                
 
                 if(ruleHit){
                     //复制一份对象，回填规则id与等级，不要修改原始对象
