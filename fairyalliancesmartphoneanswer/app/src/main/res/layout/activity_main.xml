@@ -73,19 +73,36 @@
         android:onClick="grantAllPermissions"/>
         
         
-          <Button
+      
+        
+         
+        <!-- ==========新增横向布局：多个按钮并排2026-08-08 ========== --> 
+         <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        
+            <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="获取tag通讯录"
         android:onClick="getContactBytag"/>
         
-          <Button
+         <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="获取tag短信"
+        android:text="获取关键短信"
         android:onClick="getSmsRecoredAnalysis"/>
         
+         <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="获取all短信"
+        android:onClick="getSmsRecoredAnalysisAll"/>
         
+         </LinearLayout>
+    <!-- ==========横向布局结束 ========== -->
            <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
