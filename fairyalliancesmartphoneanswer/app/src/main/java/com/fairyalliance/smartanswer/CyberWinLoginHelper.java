@@ -185,7 +185,7 @@ public class CyberWinLoginHelper {
       /**
      * 获取登录id
      */
-    public static String isLogined(Context context) {
+    public static String Loginedsession(Context context) {
         LoginSpModel info = getStoredLoginInfo(context);
         if(info.loginStatus == 0){
            return info.cwpd_session; 
