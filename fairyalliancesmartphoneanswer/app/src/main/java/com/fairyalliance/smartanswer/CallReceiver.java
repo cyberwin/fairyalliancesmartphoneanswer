@@ -413,7 +413,7 @@ public class CallReceiver extends BroadcastReceiver {
                 String nowTime = dateFormat.format(System.currentTimeMillis());
                 //替换填写你本地电脑内网固定IP+你搭建好的接口路径，例http://192.168.1.105:8080/callnotify
                 
-                CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+                CyberWinLoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(Cyber_Public_Var.cyber_main_instance);
            
                 //writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
      
