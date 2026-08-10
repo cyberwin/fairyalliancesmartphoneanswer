@@ -729,12 +729,12 @@ public void getContactBytag(View view) {
         loginHelper.showLoginDialog();
         
         //2.读取存储的登录凭证，用于其他http请求
-        LoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(this);
+        CyberWinLoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(this);
         String userId = loginInfo.userId;
         String token = loginInfo.token;
         
         //3.登录状态判断
-        if (LoginHelper.isLogined(this)) {
+        if (CyberWinLoginHelper.isLogined(this)) {
             //已登录，可以携带token发起其他业务POST
         } else {
             //未登录，需要登录
