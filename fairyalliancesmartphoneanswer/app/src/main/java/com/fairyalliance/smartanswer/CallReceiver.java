@@ -419,8 +419,8 @@ public class CallReceiver extends BroadcastReceiver {
      
      
                 String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=phonecalllog";
-                 localHttpApi=localHttpApi+"&cwpd_session="+loginInfo.cwpd_session；
-                 localHttpApi=localHttpApi+"&callstate="+phonestate；
+                 localHttpApi=localHttpApi+"&cwpd_session="+loginInfo.cwpd_session;
+                 localHttpApi=localHttpApi+"&callstate="+phonestate;
                 //原生GET请求携带来电号码+时间两个参数推送到本地服务
                 URL url = new URL(localHttpApi + "&phone="+callPhone+"&client_time="+nowTime+"&mer_id=77&store_id=72&eco_type=phonecall");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
