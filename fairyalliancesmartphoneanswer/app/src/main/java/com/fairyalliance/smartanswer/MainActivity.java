@@ -723,10 +723,11 @@ public void getContactBytag(View view) {
     //2026-08-10
       public void CyberWinLoginHelper_login(View view) {
          String 登录localHttpApi = "http://51.onelink.ynwlzc.net/o2o/index.php/appdevgo/app迷你登录/o2o/index.php/appdevgo/app迷你登录";
-        
+      try {  
        //1.唤起登录弹窗
         CyberWinLoginHelper loginHelper = new CyberWinLoginHelper(this,登录localHttpApi);
         loginHelper.showLoginDialog();
+        /*
         
         //2.读取存储的登录凭证，用于其他http请求
         CyberWinLoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(this);
@@ -739,10 +740,18 @@ public void getContactBytag(View view) {
         } else {
             //未登录，需要登录
         }
+        */
         // writelog("本地推送","短信推送","jsonhitList："+json);
          
         
-     
+      } catch (Exception e) {
+        //捕获所有异常，打印堆栈，方便排查崩溃原因
+       // e.printStackTrace();
+        //可选：弹出toast提示用户
+      //  android.widget.Toast.makeText(this, "打开登录弹窗异常：" + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
+         showShortToast(this,"打开登录弹窗异常：" + e.getMessage());
+         
+    }
      
    
     }
