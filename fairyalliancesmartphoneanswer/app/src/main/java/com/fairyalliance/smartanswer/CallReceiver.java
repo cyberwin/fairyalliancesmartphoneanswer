@@ -40,7 +40,7 @@ import CyberWinPHP.Cyber_CPU.Cyber_Public_Var;
 import java.net.URL;
 import java.net.HttpURLConnection;
  
- 
+import com.fairyalliance.smartanswer.CyberWinLoginHelper;
  
  
 public class CallReceiver extends BroadcastReceiver {
@@ -102,7 +102,9 @@ public class CallReceiver extends BroadcastReceiver {
                                       
                                      String fams_phonelognow=  Cyber_Public_Var.getCyberWinPath(fams_phonelog,context);
                                      
-                                     pushCallNumAndStartPlay(incomingNumber);
+                                    // pushCallNumAndStartPlay(incomingNumber);
+                                     
+                                     pushCallReciverNum(incomingNumber,"RINGING");
                                       
                                      appendPhoneLog(fams_phonelognow,incomingNumber);
                                       
@@ -118,6 +120,7 @@ public class CallReceiver extends BroadcastReceiver {
                     // 通话接通状态
                     {
                          writelog("onReceive","jt","通话接通状态");
+                          pushCallReciverNum("","OFFHOOK");
                           handler.postDelayed(() -> playAudioPriority(context), startTime);
                     }
                     
@@ -126,7 +129,8 @@ public class CallReceiver extends BroadcastReceiver {
               //  case TelephonyManager.EXTRA_STATE_IDLE://TelephonyManager.CALL_STATE_IDLE:
                     // 通话结束状态
                      if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
-                         writelog("onReceive","jt","通话结束状态");
+                          pushCallReciverNum("","IDLE");
+                          writelog("onReceive","jt","通话结束状态");
                           releaseAudioResources();
                     }
                     
@@ -380,6 +384,43 @@ public class CallReceiver extends BroadcastReceiver {
                 //替换填写你本地电脑内网固定IP+你搭建好的接口路径，例http://192.168.1.105:8080/callnotify
                 String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=phonecalllog";
     
+                //原生GET请求携带来电号码+时间两个参数推送到本地服务
+                URL url = new URL(localHttpApi + "&phone="+callPhone+"&client_time="+nowTime+"&mer_id=77&store_id=72&eco_type=phonecall");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(3000);
+                int code = conn.getResponseCode();
+                writelog("本地推送","成功","号码"+callPhone+"时间"+nowTime+"已推送本地服务，返回状态码"+code);
+                conn.disconnect();
+            } catch (Exception e) {
+                writelog("本地推送","失败","推送本地服务异常："+e.getMessage());
+            }
+        }).start();
+    
+        //推送动作同步并行，本机直接独立触发你原有全套合规音频播放逻辑
+        //playAudioPriority(context);
+    }
+    
+    //2026-08-10
+      ////2026-04-23
+    //独立封装来电推送触发播放共用方法，来电监听器解析出来电号码后直接调用本方法即可
+    private void pushCallReciverNum( String callPhone , String phonestate){
+        //单独子线程执行网络推送，绝不占用来电广播主线程
+        new Thread(() -> {
+            try {
+                //规整本地标准时间
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String nowTime = dateFormat.format(System.currentTimeMillis());
+                //替换填写你本地电脑内网固定IP+你搭建好的接口路径，例http://192.168.1.105:8080/callnotify
+                
+                CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           
+                //writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
+     
+     
+                String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=phonecalllog";
+                 localHttpApi=localHttpApi+"&cwpd_session="+loginInfo.cwpd_session；
+                 localHttpApi=localHttpApi+"&callstate="+phonestate；
                 //原生GET请求携带来电号码+时间两个参数推送到本地服务
                 URL url = new URL(localHttpApi + "&phone="+callPhone+"&client_time="+nowTime+"&mer_id=77&store_id=72&eco_type=phonecall");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
