@@ -570,7 +570,7 @@ public void getContactBytag(View view) {
         
                      
                      String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedContactlist";
-                      localHttpApi=localHttpApi+"&cwpd_session="+loginInfo.cwpd_session；
+                      localHttpApi=localHttpApi+"&cwpd_session="+loginInfo.cwpd_session;
                     //原生GET请求携带来电号码+时间两个参数推送到本地服务
                     
                      URL url = new URL(localHttpApi);
@@ -657,7 +657,7 @@ public void getContactBytag(View view) {
         
         
          String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=gainsmsrules";
-         localHttpApi=localHttpApi+"&cwpd_session="+loginInfo.cwpd_session；
+         localHttpApi=localHttpApi+"&cwpd_session="+loginInfo.cwpd_session;
          CyberWinEnterpriseAutoSmsRuleHelper.loadRuleFromServer(localHttpApi);
          
           showShortToast(this,"获取分析规则");
@@ -682,7 +682,7 @@ public void getContactBytag(View view) {
         
          
          String 短信任务localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedSmsTaskauto";
-         短信任务localHttpApi=短信任务localHttpApi+"&cwpd_session="+loginInfo.cwpd_session；
+         短信任务localHttpApi=短信任务localHttpApi+"&cwpd_session="+loginInfo.cwpd_session;
          
          fn_cyberwin_senddata(短信任务localHttpApi,json);
           
@@ -712,7 +712,7 @@ public void getContactBytag(View view) {
           
          
          String 短信任务localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedSmsTaskauto";
-         短信任务localHttpApi=短信任务localHttpApi+"&cwpd_session="+loginInfo.cwpd_session；
+         短信任务localHttpApi=短信任务localHttpApi+"&cwpd_session="+loginInfo.cwpd_session;
          fn_cyberwin_senddata(短信任务localHttpApi,rawjson);
            
          showShortToast(this,"已经提交短信");
