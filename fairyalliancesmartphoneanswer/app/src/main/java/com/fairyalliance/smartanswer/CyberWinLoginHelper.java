@@ -1,3 +1,5 @@
+package com.fairyalliance.smartanswer;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
