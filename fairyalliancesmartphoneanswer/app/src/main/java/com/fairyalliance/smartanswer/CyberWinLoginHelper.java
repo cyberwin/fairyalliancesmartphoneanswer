@@ -33,7 +33,7 @@ public class CyberWinLoginHelper {
 
     public CyberWinLoginHelper(Context context,String apiurl) {
         LOGIN_URL =apiurl;
-        this.mContext = context.getApplicationContext();
+        this.mContext = context;//context.getApplicationContext();
     }
 
     /**
