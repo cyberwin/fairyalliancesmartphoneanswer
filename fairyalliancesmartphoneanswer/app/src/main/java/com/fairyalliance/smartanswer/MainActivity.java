@@ -564,7 +564,7 @@ public void getContactBytag(View view) {
                       writelog("本地推送","联系人","推送本地服务异常："+contactJson);
                       
                                //拿到凭证
-           CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           CyberWinLoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(getApplicationContext());
            
           writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
         
@@ -651,7 +651,7 @@ public void getContactBytag(View view) {
     public void synctaskrules(View view) {
             //1.读取原始短信
                  //拿到凭证
-           CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           CyberWinLoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(getApplicationContext());
            
           writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
         
@@ -676,7 +676,7 @@ public void getContactBytag(View view) {
          
          // writelog("本地推送","短信推送","jsonreadSms："+rawjson);
               //拿到凭证
-           CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           CyberWinLoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(getApplicationContext());
            
           writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
         
@@ -706,7 +706,7 @@ public void getContactBytag(View view) {
           writelog("本地推送","短信推送all","jsonreadSms："+rawjson);
           
              //拿到凭证
-           CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           CyberWinLoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(getApplicationContext());
            
           writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
           
@@ -729,7 +729,7 @@ public void getContactBytag(View view) {
         loginHelper.showLoginDialog();
         
         //2.读取存储的登录凭证，用于其他http请求
-        LoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+        LoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(this);
         String userId = loginInfo.userId;
         String token = loginInfo.token;
         
@@ -751,7 +751,7 @@ public void getContactBytag(View view) {
        public void CyberWinLoginHelper_logincheck(View view) {
          
              //拿到凭证
-           CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           CyberWinLoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(getApplicationContext());
            
          // writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
           showShortToast(this,"登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
