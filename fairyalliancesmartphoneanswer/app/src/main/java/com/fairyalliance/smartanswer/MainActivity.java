@@ -61,7 +61,7 @@ import java.util.Locale;
 
 import com.fairyalliance.smartanswer.CyberWinEnterpriseAutoPhoneInfo;
 import com.fairyalliance.smartanswer.CyberWinEnterpriseAutoSmsRuleHelper;
-
+import com.fairyalliance.smartanswer.CyberWinLoginHelper;
  
  
 
@@ -562,9 +562,15 @@ public void getContactBytag(View view) {
                      String contactJson = CyberWinEnterpriseAutoPhoneInfo.readAllContactGroupsToJson(cyber_cpu);
                      
                       writelog("本地推送","联系人","推送本地服务异常："+contactJson);
+                      
+                               //拿到凭证
+           CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           
+          writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
+        
                      
                      String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedContactlist";
-        
+                      localHttpApi=localHttpApi+"&cwpd_session="+loginInfo.cwpd_session；
                     //原生GET请求携带来电号码+时间两个参数推送到本地服务
                     
                      URL url = new URL(localHttpApi);
@@ -637,16 +643,24 @@ public void getContactBytag(View view) {
             }//     
         }).start(); //必须调用start()，启动后台子线程
         
-            
+        showShortToast(this,"提交关键联系");     
      
     }
     
     //getSmsRecoredAnalysis
     public void synctaskrules(View view) {
             //1.读取原始短信
-         String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=gainsmsrules";
+                 //拿到凭证
+           CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           
+          writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
         
+        
+         String localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=gainsmsrules";
+         localHttpApi=localHttpApi+"&cwpd_session="+loginInfo.cwpd_session；
          CyberWinEnterpriseAutoSmsRuleHelper.loadRuleFromServer(localHttpApi);
+         
+          showShortToast(this,"获取分析规则");
     }
     public void getSmsRecoredAnalysis(View view) {
         
@@ -661,13 +675,19 @@ public void getContactBytag(View view) {
          writelog("本地推送","短信推送","jsonhitList："+json);
          
          // writelog("本地推送","短信推送","jsonreadSms："+rawjson);
+              //拿到凭证
+           CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           
+          writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
+        
          
          String 短信任务localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedSmsTaskauto";
+         短信任务localHttpApi=短信任务localHttpApi+"&cwpd_session="+loginInfo.cwpd_session；
          
          fn_cyberwin_senddata(短信任务localHttpApi,json);
           
         
-     
+        showShortToast(this,"已经提交分析短信");
    
     }
     
@@ -684,12 +704,60 @@ public void getContactBytag(View view) {
         // writelog("本地推送","短信推送","jsonhitList："+json);
          
           writelog("本地推送","短信推送all","jsonreadSms："+rawjson);
+          
+             //拿到凭证
+           CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           
+          writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
+          
          
          String 短信任务localHttpApi = "http://51.onelink.ynwlzc.net/o2o/wap.php?g=Wap&c=FAMS_smartanswer&a=fastgo&action=embedSmsTaskauto";
-         
+         短信任务localHttpApi=短信任务localHttpApi+"&cwpd_session="+loginInfo.cwpd_session；
          fn_cyberwin_senddata(短信任务localHttpApi,rawjson);
            
+         showShortToast(this,"已经提交短信");
+     
+   
+    }
+    
+    //2026-08-10
+      public void CyberWinLoginHelper_login(View view) {
+         String 登录localHttpApi = "http://51.onelink.ynwlzc.net/o2o/index.php/appdevgo/app迷你登录/o2o/index.php/appdevgo/app迷你登录";
         
+       //1.唤起登录弹窗
+        CyberWinLoginHelper loginHelper = new CyberWinLoginHelper(this,登录localHttpApi);
+        loginHelper.showLoginDialog();
+        
+        //2.读取存储的登录凭证，用于其他http请求
+        LoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+        String userId = loginInfo.userId;
+        String token = loginInfo.token;
+        
+        //3.登录状态判断
+        if (LoginHelper.isLogined(this)) {
+            //已登录，可以携带token发起其他业务POST
+        } else {
+            //未登录，需要登录
+        }
+        // writelog("本地推送","短信推送","jsonhitList："+json);
+         
+        
+     
+     
+   
+    }
+    
+    
+       public void CyberWinLoginHelper_logincheck(View view) {
+         
+             //拿到凭证
+           CyberWinLoginHelper.LoginSpModel loginInfo = LoginHelper.getStoredLoginInfo(getApplicationContext());
+           
+         // writelog("本地推送","登录信息","登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
+          showShortToast(this,"登录信息："+loginInfo.loginStatus+",session："+loginInfo.cwpd_session);
+         
+        
+     
      
    
     }
@@ -777,5 +845,22 @@ public void getContactBytag(View view) {
         }).start(); //必须调用start()，启动后台子线程
      }
     
-    
+    //2026-08-10
+    /**
+     * 短时间Toast
+     * @param context 上下文
+     * @param msg 显示文本
+     */
+    public static void showShortToast(Context context, String msg){
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 长时间Toast
+     * @param context 上下文
+     * @param msg 显示文本
+     */
+    public static void showLongToast(Context context, String msg){
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    }
 }
