@@ -730,8 +730,8 @@ public void getContactBytag(View view) {
         
         //2.读取存储的登录凭证，用于其他http请求
         CyberWinLoginHelper.LoginSpModel loginInfo = CyberWinLoginHelper.getStoredLoginInfo(this);
-        String userId = loginInfo.userId;
-        String token = loginInfo.token;
+        String userId = loginInfo.cwpd_session;
+        String msg = loginInfo.msg;
         
         //3.登录状态判断
         if (CyberWinLoginHelper.isLogined(this)) {
