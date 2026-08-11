@@ -722,7 +722,7 @@ public void getContactBytag(View view) {
     
     //2026-08-10
       public void CyberWinLoginHelper_login(View view) {
-         String 登录localHttpApi = "http://51.onelink.ynwlzc.net/o2o/index.php/appdevgo/app迷你登录/o2o/index.php/appdevgo/app迷你登录";
+         String 登录localHttpApi = "http://51.onelink.ynwlzc.net/o2o/index.php/appdevgo/app自动化终端登录";
       try {  
        //1.唤起登录弹窗
         CyberWinLoginHelper loginHelper = new CyberWinLoginHelper(this,登录localHttpApi);
